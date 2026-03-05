@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Opalite GeminiExt — Liquid Glass Dev</title>
+  <link rel="stylesheet" href="../scripts/style.css">
+  <style>
+    /* ─── Reset ─────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Google Sans', 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      overflow: hidden;
+      transition: background 0.4s ease;
+    }
+
+    /* ─── Light mode background — mimics Gemini page ────── */
+    body {
+      background:
+        radial-gradient(ellipse at 20% 30%, rgba(249,115,22,0.04), transparent 60%),
+        radial-gradient(ellipse at 80% 70%, rgba(244,63,94,0.03), transparent 60%),
+        linear-gradient(180deg, #f8f9fa 0%, #f0f1f3 100%);
+    }
+    body.dark-page {
+      background:
+        radial-gradient(ellipse at 20% 30%, rgba(249,115,22,0.06), transparent 60%),
+        radial-gradient(ellipse at 80% 70%, rgba(244,63,94,0.04), transparent 60%),
+        linear-gradient(180deg, #1a1b1e 0%, #131416 100%);
+    }
+
+    /* ─── Simulated Gemini content ─────────────────────── */
+    .gemini-page-mock {
+      flex: 1;
+      padding: 80px 48px 48px;
+      max-width: 760px;
+      overflow-y: auto;
+    }
+    .gemini-page-mock h1 {
+      font-size: 32px;
+      font-weight: 400;
+      color: #1f1f1f;
+      margin: 0 0 24px;
+      letter-spacing: -0.5px;
+    }
+    .gemini-page-mock p {
+      color: #5f6368;
+      font-size: 15px;
+      line-height: 1.7;
+      margin: 0 0 16px;
+    }
+    .gemini-page-mock code {
+      background: rgba(0,0,0,0.05);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 13px;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+    }
+    .gemini-chip-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 24px;
+    }
+    .gemini-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      border-radius: 20px;
+      border: 1px solid #dadce0;
+      font-size: 13px;
+      color: #5f6368;
+      cursor: pointer;
+      transition: all 0.2s;
+      background: transparent;
+    }
+    .gemini-chip:hover {
+      background: rgba(0,0,0,0.03);
+      border-color: #c4c7cc;
+    }
+
+    body.dark-page .gemini-page-mock h1 { color: #e3e3e3; }
+    body.dark-page .gemini-page-mock p { color: #9aa0a6; }
+    body.dark-page .gemini-page-mock code { background: rgba(255,255,255,0.08); color: #c4c7cc; }
+    body.dark-page .gemini-chip {
+      border-color: rgba(255,255,255,0.12);
+      color: #9aa0a6;
+    }
+    body.dark-page .gemini-chip:hover {
+      background: rgba(255,255,255,0.04);
+      border-color: rgba(255,255,255,0.2);
+    }
+
+    /* ─── Dev Toolbar ──────────────────────────────────── */
+    #dev-toolbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 99999;
+      background: linear-gradient(180deg, #0f0f1e 0%, #14142a 100%);
+      color: #e0e0e0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 6px 16px;
+      font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+      font-size: 11px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.4);
+      border-bottom: 1px solid rgba(249,115,22,0.2);
+    }
+    #dev-toolbar .logo {
+      font-weight: 700;
+      background: linear-gradient(135deg, #f43f5e, #f97316, #eab308);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-size: 13px;
+      letter-spacing: -0.3px;
+    }
+    #dev-toolbar button {
+      background: rgba(255,255,255,0.04);
+      color: #b0b0c0;
+      border: 1px solid rgba(255,255,255,0.08);
+      padding: 4px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 10px;
+      font-family: inherit;
+      transition: all 0.15s ease;
+    }
+    #dev-toolbar button:hover {
+      background: rgba(255,255,255,0.08);
+      border-color: rgba(255,255,255,0.15);
+      color: #fff;
+    }
+    #dev-toolbar button.active {
+      background: linear-gradient(135deg, rgba(249,115,22,0.9), rgba(244,63,94,0.8));
+      color: white;
+      border-color: transparent;
+      box-shadow: 0 2px 8px rgba(249,115,22,0.3);
+    }
+    #dev-toolbar .separator {
+      width: 1px;
+      height: 18px;
+      background: rgba(255,255,255,0.08);
+    }
+    #dev-toolbar .label {
+      color: #6b7280;
+      text-transform: uppercase;
+      font-size: 9px;
+      letter-spacing: 0.5px;
+    }
+    #dev-toolbar .hint {
+      color: #4b5060;
+      margin-left: auto;
+      font-size: 10px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Dev Toolbar -->
+  <div id="dev-toolbar">
+    <span class="logo">Opalite Dev</span>
+    <div class="separator"></div>
+    <span class="label">Panel</span>
+    <button onclick="togglePanel()" id="btn-panel">Show</button>
+    <div class="separator"></div>
+    <span class="label">Theme</span>
+    <button onclick="toggleDarkMode()" id="btn-dark">Light</button>
+    <div class="separator"></div>
+    <span class="label">View</span>
+    <button onclick="showSection('main')" class="active" data-section="main">Main</button>
+    <button onclick="showSection('settings')" data-section="settings">Settings</button>
+    <button onclick="showSection('sidebar')" data-section="sidebar">Sidebar</button>
+    <button onclick="showSection('modals')" data-section="modals">Modals</button>
+    <div class="separator"></div>
+    <span class="label">Size</span>
+    <button onclick="setPosition('right')" class="active" data-pos="right">Panel</button>
+    <button onclick="setPosition('full')" data-pos="full">Full</button>
+    <span class="hint">Liquid Glass Design System v2.0</span>
+  </div>
+
+  <!-- Simulated Gemini Page -->
+  <div class="gemini-page-mock">
+    <h1>Hello, Jonathan</h1>
+    <p>This simulates the Gemini page background so you can see the liquid glass panel rendering over real content. The extension panel docks to the right, overlaying this content with its frosted glass surface.</p>
+    <p>Edit <code>scripts/style.css</code> and save. If using Live Server, the browser auto-reloads for instant iteration.</p>
+    <div class="gemini-chip-row">
+      <button class="gemini-chip">Help me write</button>
+      <button class="gemini-chip">Analyze images</button>
+      <button class="gemini-chip">Plan a trip</button>
+      <button class="gemini-chip">Write code</button>
+    </div>
+  </div>
+
+  <!-- Mock Panel -->
+  <script src="mock-panel.js"></script>
+</body>
+</html>

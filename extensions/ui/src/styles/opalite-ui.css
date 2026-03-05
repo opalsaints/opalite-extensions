@@ -1,0 +1,21 @@
+/**
+ * Opalite UI — Styles for new components built with the Vite pipeline.
+ *
+ * These styles are bundled into opalite-ui.js and injected into the
+ * shadow root. They can use the design tokens from the main style.css
+ * since both live in the same shadow root.
+ *
+ * No !important needed here — Shadow DOM provides isolation.
+ */
+
+#opalite-ui-mount {
+  /* Container for Opalite UI overlay components */
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+}
+
+#opalite-ui-mount > * {
+  pointer-events: auto;
+}

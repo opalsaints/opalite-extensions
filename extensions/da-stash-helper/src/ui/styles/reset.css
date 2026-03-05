@@ -1,0 +1,57 @@
+/**
+ * Shadow DOM reset — normalize styles inside the shadow root.
+ * Prevents DA's styles from leaking in.
+ */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:host {
+  font-family: var(--dsh-font-family);
+  font-size: var(--dsh-font-size-base);
+  color: var(--dsh-text-primary);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+button {
+  font-family: inherit;
+  font-size: inherit;
+  cursor: pointer;
+  border: none;
+  outline: none;
+}
+
+select, input, textarea {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+a {
+  color: var(--dsh-accent);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--dsh-bg-primary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--dsh-border);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--dsh-border-hover);
+}

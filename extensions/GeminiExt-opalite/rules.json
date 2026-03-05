@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "priority": 1,
+    "action": {
+      "type": "modifyHeaders",
+      "responseHeaders": [
+        {
+          "header": "Content-Security-Policy",
+          "operation": "remove"
+        }
+      ]
+    },
+    "condition": {
+      "urlFilter": "|https*",
+      "requestDomains": [
+        "google.com",
+        "labs.google"
+      ],
+      "resourceTypes": [
+        "main_frame",
+        "sub_frame"
+      ]
+    }
+  }
+]

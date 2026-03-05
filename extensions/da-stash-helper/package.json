@@ -1,0 +1,27 @@
+{
+  "name": "da-stash-helper",
+  "version": "2.0.0",
+  "type": "module",
+  "description": "DeviantArt Stash Helper — bulk automation for stash management",
+  "scripts": {
+    "dev": "node build.mjs --watch",
+    "build": "node build.mjs",
+    "type-check": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "eslint src/"
+  },
+  "devDependencies": {
+    "@types/chrome": "^0.0.268",
+    "jsdom": "^28.1.0",
+    "typescript": "^5.3.3",
+    "vite": "^5.0.12",
+    "vitest": "^1.2.0",
+    "ws": "^8.19.0"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild"
+    ]
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "ext_name_production": {
+    "message": "Opalite for Instagram"
+  },
+  "ext_name_beta": {
+    "message": "Opalite for Instagram (Beta)"
+  },
+  "ext_name_dev": {
+    "message": "Opalite for Instagram (Dev)"
+  },
+  "ext_description": {
+    "message": "Post your AI-generated images to Instagram directly from Opalite. Upload photos, write captions, and publish from your desktop."
+  }
+}

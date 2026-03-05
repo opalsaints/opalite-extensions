@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "lib": ["ES2021", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "baseUrl": ".",
+    "paths": {
+      "@platform/*": ["src/platform/*"],
+      "@core/*": ["src/core/*"],
+      "@automation/*": ["src/automation/*"],
+      "@ui/*": ["src/ui/*"],
+      "@shared/*": ["src/shared/*"],
+      "@integration/*": ["src/integration/*"]
+    }
+  },
+  "include": ["src/"]
+}

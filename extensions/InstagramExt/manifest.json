@@ -1,0 +1,66 @@
+{
+  "manifest_version": 3,
+
+  "name": "Opalite for Instagram",
+  "description": "Post your AI-generated images to Instagram directly from Opalite.",
+  "version": "1.0.0",
+
+  "default_locale": "en",
+  "icons": {
+    "16": "img/icon-16.png",
+    "128": "img/icon-128.png",
+    "500": "img/icon-500.png"
+  },
+
+  "background": {
+    "service_worker": "/app/bg-wrapper.js"
+  },
+
+  "content_security_policy": {
+    "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'"
+  },
+
+  "content_scripts": [
+    {
+      "matches": ["https://*.instagram.com/*"],
+      "js": ["/app/cs.js"],
+      "run_at": "document_start",
+      "all_frames": true
+    },
+    {
+      "matches": ["https://*.instagram.com/*"],
+      "js": ["/scripts/socket.io.min.js", "/scripts/opalite-bridge.js"],
+      "run_at": "document_idle",
+      "all_frames": false
+    }
+  ],
+
+  "permissions": [
+    "alarms",
+    "cookies",
+    "declarativeNetRequest",
+    "offscreen",
+    "storage"
+  ],
+  "optional_permissions": ["downloads"],
+
+  "host_permissions": [
+    "*://*.instagram.com/*",
+    "*://opalitestudios.com/*",
+    "*://*.opalitestudios.com/*"
+  ],
+  "optional_host_permissions": ["*://*.fbcdn.net/*"],
+
+  "action": {
+    "default_icon": { "48": "img/icon-badge-48.png" },
+    "default_popup": "popup.html",
+    "default_title": "Opalite for Instagram"
+  },
+
+  "web_accessible_resources": [
+    {
+      "resources": ["/*"],
+      "matches": ["*://*.instagram.com/*"]
+    }
+  ]
+}

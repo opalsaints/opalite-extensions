@@ -1,0 +1,14 @@
+{
+  "ext_name_production": {
+    "message": "Opalite for Instagram"
+  },
+  "ext_name_beta": {
+    "message": "Opalite for Instagram (Beta)"
+  },
+  "ext_name_dev": {
+    "message": "Opalite for Instagram (Dev)"
+  },
+  "ext_description": {
+    "message": "Grow your Instagram. Post Instagram stories, reels, photos from web. Download, schedule posts, track unfollowers, remove bots."
+  }
+}

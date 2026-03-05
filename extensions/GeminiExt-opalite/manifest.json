@@ -1,0 +1,127 @@
+{
+  "manifest_version": 3,
+  "name": "__MSG_extName__",
+  "version": "1.2.0",
+  "description": "__MSG_extDescription__",
+  "default_locale": "en",
+  "icons": {
+    "16": "images/icon-16.png",
+    "32": "images/icon-32.png",
+    "48": "images/icon-48.png",
+    "128": "images/icon-128.png"
+  },
+  "action": {
+    "default_icon": "images/icon-128.png",
+    "default_title": "__MSG_extName__",
+    "default_popup": "popup.html"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "js": [
+        "scripts/opalite-auth.js"
+      ],
+      "matches": [
+        "https://gemini.google.com/*",
+        "https://aistudio.google.com/*",
+        "https://labs.google/*"
+      ],
+      "run_at": "document_start",
+      "world": "MAIN",
+      "all_frames": false
+    },
+    {
+      "js": [
+        "scripts/opalite-inject.js"
+      ],
+      "matches": [
+        "https://gemini.google.com/*",
+        "https://aistudio.google.com/*",
+        "https://labs.google/*"
+      ],
+      "run_at": "document_start",
+      "all_frames": false
+    },
+    {
+      "js": [
+        "scripts/opalite-socket.js"
+      ],
+      "matches": [
+        "https://gemini.google.com/*",
+        "https://aistudio.google.com/*",
+        "https://labs.google/*"
+      ],
+      "run_at": "document_start",
+      "world": "MAIN",
+      "all_frames": false
+    },
+    {
+      "js": [
+        "scripts/content.js",
+        "scripts/opalite-upsell.js"
+      ],
+      "css": [],
+      "matches": [
+        "https://gemini.google.com/*",
+        "https://aistudio.google.com/*",
+        "https://labs.google/*"
+      ],
+      "run_at": "document_start",
+      "all_frames": false
+    },
+    {
+      "js": [
+        "scripts/opalite-callback.js"
+      ],
+      "matches": [
+        "https://opalitestudios.com/api/extension/auth*"
+      ],
+      "run_at": "document_idle",
+      "all_frames": false
+    }
+  ],
+  "permissions": [
+    "downloads",
+    "declarativeNetRequest",
+    "storage",
+    "notifications",
+    "scripting",
+    "activeTab",
+    "cookies"
+  ],
+  "web_accessible_resources": [
+    {
+      "matches": [
+        "https://gemini.google.com/*",
+        "https://aistudio.google.com/*",
+        "https://labs.google/*"
+      ],
+      "resources": [
+        "scripts/style.css",
+        "scripts/compat.js",
+        "scripts/main.js",
+        "scripts/opalite-upsell.js",
+        "scripts/opalite-auth.js",
+        "scripts/opalite-socket.js",
+        "scripts/socket.io.min.js"
+      ]
+    }
+  ],
+  "host_permissions": [
+    "https://gemini.google.com/*",
+    "https://aistudio.google.com/*",
+    "https://labs.google/*",
+    "https://opalitestudios.com/*"
+  ],
+  "declarative_net_request": {
+    "rule_resources": [
+      {
+        "id": "ruleset_1",
+        "enabled": true,
+        "path": "rules.json"
+      }
+    ]
+  }
+}

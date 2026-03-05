@@ -1,0 +1,171 @@
+name: Publish Chrome Extensions
+
+# ── Triggers ────────────────────────────────────────────────────
+# 1. Manual dispatch (primary) — click "Run workflow" in GitHub Actions UI
+# 2. Push tags like "ext-v1.3.0" for automated releases
+on:
+  workflow_dispatch:
+    inputs:
+      extensions:
+        description: 'Which extensions to publish'
+        required: true
+        type: choice
+        default: 'all'
+        options:
+          - all
+          - GrokExt-opalite
+          - ChatGPTExt-opalite
+          - GeminiExt-opalite
+          - da-stash-helper
+      bump:
+        description: 'Version bump type'
+        required: true
+        type: choice
+        default: 'patch'
+        options:
+          - patch
+          - minor
+          - major
+      publish:
+        description: 'Publish to Chrome Web Store (uncheck for build-only)'
+        required: true
+        type: boolean
+        default: true
+
+  push:
+    tags:
+      - 'ext-v*'
+
+# ── Environment ─────────────────────────────────────────────────
+env:
+  NODE_VERSION: '20'
+
+jobs:
+  release:
+    name: Build & Publish Extensions
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Terser
+        run: npm install -g terser
+
+      # ── Write CWS credentials from GitHub Secrets ──
+      - name: Write CWS credentials
+        env:
+          CWS_CLIENT_ID: ${{ secrets.CWS_CLIENT_ID }}
+          CWS_CLIENT_SECRET: ${{ secrets.CWS_CLIENT_SECRET }}
+          CWS_REFRESH_TOKEN: ${{ secrets.CWS_REFRESH_TOKEN }}
+          CWS_PUBLISHER_ID: ${{ secrets.CWS_PUBLISHER_ID }}
+          CWS_ID_GROKEXT: ${{ secrets.CWS_ID_GROKEXT }}
+          CWS_ID_GEMINIEXT: ${{ secrets.CWS_ID_GEMINIEXT }}
+          CWS_ID_CHATGPTEXT: ${{ secrets.CWS_ID_CHATGPTEXT }}
+          CWS_ID_DA_STASH_HELPER: ${{ secrets.CWS_ID_DA_STASH_HELPER }}
+        run: |
+          cat > extensions/.cws-credentials << CREDS
+          CWS_CLIENT_ID="$CWS_CLIENT_ID"
+          CWS_CLIENT_SECRET="$CWS_CLIENT_SECRET"
+          CWS_REFRESH_TOKEN="$CWS_REFRESH_TOKEN"
+          CWS_PUBLISHER_ID="$CWS_PUBLISHER_ID"
+          CWS_ID_GrokExt_opalite="$CWS_ID_GROKEXT"
+          CWS_ID_GeminiExt_opalite="$CWS_ID_GEMINIEXT"
+          CWS_ID_ChatGPTExt_opalite="$CWS_ID_CHATGPTEXT"
+          CWS_ID_da_stash_helper="$CWS_ID_DA_STASH_HELPER"
+          CWS_ID_InstagramExt=""
+          CREDS
+
+      # ── Determine what to release ──
+      - name: Set release parameters
+        id: params
+        env:
+          INPUT_EXTENSIONS: ${{ inputs.extensions }}
+          INPUT_BUMP: ${{ inputs.bump }}
+          INPUT_PUBLISH: ${{ inputs.publish }}
+          EVENT_NAME: ${{ github.event_name }}
+        run: |
+          if [ "$EVENT_NAME" = "workflow_dispatch" ]; then
+            echo "extensions=$INPUT_EXTENSIONS" >> "$GITHUB_OUTPUT"
+            echo "bump=$INPUT_BUMP" >> "$GITHUB_OUTPUT"
+            if [ "$INPUT_PUBLISH" = "true" ]; then
+              echo "publish_flag=" >> "$GITHUB_OUTPUT"
+            else
+              echo "publish_flag=--build-only" >> "$GITHUB_OUTPUT"
+            fi
+          else
+            echo "extensions=all" >> "$GITHUB_OUTPUT"
+            echo "bump=patch" >> "$GITHUB_OUTPUT"
+            echo "publish_flag=" >> "$GITHUB_OUTPUT"
+          fi
+
+      # ── Release ──
+      - name: Release extensions
+        env:
+          BUMP: ${{ steps.params.outputs.bump }}
+          TARGET: ${{ steps.params.outputs.extensions }}
+          PUBLISH_FLAG: ${{ steps.params.outputs.publish_flag }}
+        run: |
+          ARGS="--${BUMP}"
+          [ -n "$PUBLISH_FLAG" ] && ARGS="$ARGS $PUBLISH_FLAG"
+
+          if [ "$TARGET" != "all" ]; then
+            ARGS="$TARGET $ARGS"
+          fi
+
+          echo "Running: ./extensions/release.sh $ARGS"
+          chmod +x extensions/release.sh extensions/build.sh extensions/publish.sh
+          ./extensions/release.sh $ARGS
+
+      # ── Commit version bumps back to repo ──
+      - name: Commit version bumps
+        if: success()
+        env:
+          BUMP: ${{ steps.params.outputs.bump }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git add "extensions/*/manifest.json" 2>/dev/null || true
+
+          if git diff --cached --quiet; then
+            echo "No version changes to commit"
+          else
+            VERSIONS=""
+            for dir in extensions/*/; do
+              if [ -f "$dir/manifest.json" ]; then
+                name=$(basename "$dir")
+                ver=$(grep -o '"version": "[^"]*"' "$dir/manifest.json" | head -1 | grep -o '[0-9.]*')
+                VERSIONS="$VERSIONS $name@$ver"
+              fi
+            done
+
+            git commit -m "chore: bump extension versions ($BUMP)
+
+            Extensions:$VERSIONS"
+            git push
+          fi
+
+      # ── Upload zips as artifacts (for download/review) ──
+      - name: Upload build artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: extension-zips
+          path: extensions/*.zip
+          retention-days: 30
+          if-no-files-found: warn

@@ -1,0 +1,24 @@
+{
+  "name": "opalite-extensions",
+  "private": true,
+  "description": "Chrome extensions for Opalite — AI image suite for Grok, ChatGPT, Gemini & DeviantArt",
+  "scripts": {
+    "build": "./extensions/release.sh --build-only",
+    "release": "./extensions/release.sh",
+    "release:patch": "./extensions/release.sh --patch",
+    "release:minor": "./extensions/release.sh --minor",
+    "release:major": "./extensions/release.sh --major",
+    "release:dry": "./extensions/release.sh --dry-run",
+    "ui:build": "pnpm --filter @opalite/extension-ui build",
+    "ui:watch": "pnpm --filter @opalite/extension-ui build:watch"
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "pnpm": ">=9.0.0"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild"
+    ]
+  }
+}

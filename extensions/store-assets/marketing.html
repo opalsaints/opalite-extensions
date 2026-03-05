@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Opalite CWS Marketing Assets</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #1a1a2e; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; padding: 40px; color: #fff; }
+  h1 { margin-bottom: 10px; font-size: 14px; color: #999; text-transform: uppercase; letter-spacing: 2px; }
+  .asset-label { font-size: 11px; color: #666; margin: 20px 0 6px; font-family: monospace; }
+
+  /* ═══════════════════════════════════════════════════ */
+  /* PROMO TILE — 440 × 280                            */
+  /* ═══════════════════════════════════════════════════ */
+  .promo-tile {
+    width: 440px; height: 280px;
+    background: #0B0C10;
+    border-radius: 0;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 8px;
+  }
+  .promo-tile::before {
+    content: '';
+    position: absolute;
+    top: -80px; right: -80px;
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(244,63,94,0.15) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .promo-tile::after {
+    content: '';
+    position: absolute;
+    bottom: -60px; left: -60px;
+    width: 250px; height: 250px;
+    background: radial-gradient(circle, rgba(249,115,22,0.1) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .promo-tile .accent-line {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #f43f5e, #f97316, #eab308);
+  }
+  .promo-tile .logo-mark {
+    width: 48px; height: 48px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #f43f5e, #f97316, #eab308);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px; font-weight: 800; color: #fff;
+    margin-bottom: 16px;
+    box-shadow: 0 4px 20px rgba(244,63,94,0.3);
+    position: relative; z-index: 1;
+  }
+  .promo-tile .ext-name {
+    font-size: 28px; font-weight: 700; color: #fff;
+    letter-spacing: -0.5px;
+    position: relative; z-index: 1;
+  }
+  .promo-tile .ext-name .highlight {
+    background: linear-gradient(90deg, #f43f5e, #f97316);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .promo-tile .tagline {
+    font-size: 13px; color: #9ca3af; margin-top: 8px;
+    position: relative; z-index: 1;
+    letter-spacing: 0.3px;
+  }
+  .promo-tile .badge {
+    position: absolute;
+    bottom: 16px; right: 16px;
+    font-size: 10px;
+    color: #6b7280;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    z-index: 1;
+  }
+  .promo-tile .by-opalite {
+    position: absolute;
+    bottom: 16px; left: 16px;
+    font-size: 10px;
+    color: #4b5563;
+    letter-spacing: 0.5px;
+    z-index: 1;
+  }
+
+  /* ═══════════════════════════════════════════════════ */
+  /* SCREENSHOT — 1280 × 800                           */
+  /* ═══════════════════════════════════════════════════ */
+  .screenshot {
+    width: 1280px; height: 800px;
+    background: #0B0C10;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 8px;
+  }
+  /* Gradient mesh bg */
+  .screenshot .mesh {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse at 20% 50%, rgba(244,63,94,0.08) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 20%, rgba(249,115,22,0.06) 0%, transparent 50%),
+      radial-gradient(ellipse at 60% 80%, rgba(234,179,8,0.05) 0%, transparent 50%);
+  }
+  /* Grid pattern */
+  .screenshot .grid-bg {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+
+  .screenshot .content {
+    position: relative; z-index: 1;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px;
+  }
+
+  /* Hero screenshot */
+  .screenshot.hero .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(244,63,94,0.1);
+    border: 1px solid rgba(244,63,94,0.2);
+    border-radius: 20px;
+    padding: 6px 16px;
+    font-size: 12px;
+    color: #f43f5e;
+    margin-bottom: 32px;
+    letter-spacing: 0.5px;
+  }
+  .screenshot.hero h2 {
+    font-size: 52px;
+    font-weight: 800;
+    text-align: center;
+    line-height: 1.15;
+    margin-bottom: 20px;
+    letter-spacing: -1px;
+  }
+  .screenshot.hero h2 .grad {
+    background: linear-gradient(90deg, #f43f5e, #f97316, #eab308);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .screenshot.hero .subtitle {
+    font-size: 20px;
+    color: #9ca3af;
+    text-align: center;
+    max-width: 600px;
+    line-height: 1.5;
+    margin-bottom: 48px;
+  }
+  /* Mockup UI card */
+  .ui-card {
+    background: #111827;
+    border: 1px solid #1f2937;
+    border-radius: 16px;
+    padding: 24px;
+    width: 700px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  }
+  .ui-card .card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .ui-card .dot { width: 10px; height: 10px; border-radius: 50%; }
+  .ui-card .dot-r { background: #ef4444; }
+  .ui-card .dot-y { background: #eab308; }
+  .ui-card .dot-g { background: #22c55e; }
+  .ui-card .card-title {
+    font-size: 13px; color: #6b7280; margin-left: 8px;
+  }
+  .ui-card .image-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+  }
+  .ui-card .img-thumb {
+    aspect-ratio: 1;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #1f2937, #374151);
+    position: relative;
+    overflow: hidden;
+  }
+  .ui-card .img-thumb::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg,
+      rgba(244,63,94,0.2),
+      rgba(249,115,22,0.15),
+      rgba(234,179,8,0.1));
+    opacity: 0.6;
+  }
+  .ui-card .img-thumb .check {
+    position: absolute;
+    top: 6px; right: 6px;
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    background: #f43f5e;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; color: #fff; z-index: 1;
+  }
+
+  /* Features screenshot */
+  .screenshot.features .content {
+    flex-direction: row;
+    gap: 60px;
+    padding: 80px;
+    align-items: center;
+  }
+  .feature-list {
+    flex: 1;
+  }
+  .feature-list h2 {
+    font-size: 40px;
+    font-weight: 800;
+    margin-bottom: 36px;
+    letter-spacing: -0.5px;
+  }
+  .feature-list h2 .grad {
+    background: linear-gradient(90deg, #f43f5e, #f97316);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .feature-item {
+    display: flex; align-items: flex-start; gap: 16px;
+    margin-bottom: 28px;
+  }
+  .feature-icon {
+    width: 40px; height: 40px;
+    border-radius: 10px;
+    background: rgba(244,63,94,0.1);
+    border: 1px solid rgba(244,63,94,0.2);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  .feature-item h3 {
+    font-size: 16px; font-weight: 600; margin-bottom: 4px;
+  }
+  .feature-item p {
+    font-size: 13px; color: #9ca3af; line-height: 1.4;
+  }
+  .feature-visual {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .phone-frame {
+    width: 280px;
+    background: #111827;
+    border: 1px solid #1f2937;
+    border-radius: 20px;
+    padding: 16px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+  }
+  .phone-frame .popup-header {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 16px;
+  }
+  .phone-frame .popup-logo {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #f43f5e, #f97316, #eab308);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 14px;
+  }
+  .phone-frame .popup-title {
+    font-size: 14px; font-weight: 600;
+  }
+  .phone-frame .popup-sub {
+    font-size: 10px; color: #6b7280;
+  }
+  .phone-frame .status-bar {
+    display: flex; align-items: center; gap: 8px;
+    padding: 10px 12px;
+    background: rgba(34,197,94,0.1);
+    border: 1px solid rgba(34,197,94,0.2);
+    border-radius: 10px;
+    margin-bottom: 12px;
+  }
+  .phone-frame .status-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: #22c55e;
+  }
+  .phone-frame .status-text {
+    font-size: 11px; color: #22c55e;
+  }
+  .phone-frame .stat-row {
+    display: flex; gap: 8px; margin-bottom: 12px;
+  }
+  .phone-frame .stat-box {
+    flex: 1;
+    background: #1f2937;
+    border-radius: 8px;
+    padding: 10px;
+    text-align: center;
+  }
+  .phone-frame .stat-num {
+    font-size: 18px; font-weight: 700;
+    background: linear-gradient(90deg, #f43f5e, #f97316);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .phone-frame .stat-label {
+    font-size: 9px; color: #6b7280; margin-top: 2px;
+  }
+  .phone-frame .action-btn {
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+    background: linear-gradient(90deg, #f43f5e, #f97316);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    text-align: center;
+    border: none;
+  }
+
+  /* How-it-works screenshot */
+  .screenshot.how-it-works .content {
+    padding: 80px 100px;
+  }
+  .screenshot.how-it-works h2 {
+    font-size: 40px;
+    font-weight: 800;
+    text-align: center;
+    margin-bottom: 60px;
+  }
+  .screenshot.how-it-works h2 .grad {
+    background: linear-gradient(90deg, #f43f5e, #f97316, #eab308);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .steps {
+    display: flex;
+    gap: 40px;
+    width: 100%;
+  }
+  .step {
+    flex: 1;
+    text-align: center;
+  }
+  .step-num {
+    width: 56px; height: 56px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, rgba(244,63,94,0.15), rgba(249,115,22,0.1));
+    border: 1px solid rgba(244,63,94,0.25);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px; font-weight: 800;
+    margin: 0 auto 20px;
+    background-clip: padding-box;
+    color: #f43f5e;
+  }
+  .step h3 {
+    font-size: 18px; font-weight: 700; margin-bottom: 10px;
+  }
+  .step p {
+    font-size: 14px; color: #9ca3af; line-height: 1.5;
+  }
+  .step-connector {
+    display: flex;
+    align-items: center;
+    padding-top: 28px;
+    color: #374151;
+    font-size: 24px;
+  }
+
+  /* Platform label */
+  .platform-label {
+    position: absolute;
+    top: 24px; left: 24px;
+    display: flex; align-items: center; gap: 8px;
+    z-index: 2;
+  }
+  .platform-label .pl-icon {
+    width: 28px; height: 28px;
+    border-radius: 6px;
+    background: linear-gradient(135deg, #f43f5e, #f97316, #eab308);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 13px;
+  }
+  .platform-label .pl-text {
+    font-size: 13px; font-weight: 600; color: #d1d5db;
+  }
+  .platform-label .pl-pipe { color: #374151; margin: 0 2px; }
+  .platform-label .pl-platform { color: #6b7280; font-weight: 400; }
+
+  .spacer { height: 60px; }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- GEMINI SUITE                                          -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<h1>Gemini Suite — Promo Tile (440×280)</h1>
+<div class="promo-tile" id="gemini-promo">
+  <div class="accent-line"></div>
+  <div class="logo-mark">O</div>
+  <div class="ext-name"><span class="highlight">Gemini</span> Suite</div>
+  <div class="tagline">Save AI images. Organize. Upscale. Share.</div>
+  <div class="by-opalite">by Opalite Studios</div>
+  <div class="badge">for Google Gemini</div>
+</div>
+
+<div class="asset-label">gemini-screenshot-1-hero.png (1280×800)</div>
+<div class="screenshot hero" id="gemini-ss1">
+  <div class="mesh"></div>
+  <div class="grid-bg"></div>
+  <div class="platform-label">
+    <div class="pl-icon">O</div>
+    <div class="pl-text">Gemini Suite</div>
+    <span class="pl-pipe">|</span>
+    <span class="pl-platform">by Opalite</span>
+  </div>
+  <div class="content">
+    <div class="hero-badge">&#10024; Built for Google Gemini</div>
+    <h2>Save AI Images<br><span class="grad">In One Click</span></h2>
+    <div class="subtitle">Instantly save images generated by Gemini to your Opalite cloud library. Organize, upscale, and share — all from one dashboard.</div>
+    <div class="ui-card">
+      <div class="card-header">
+        <div class="dot dot-r"></div>
+        <div class="dot dot-y"></div>
+        <div class="dot dot-g"></div>
+        <div class="card-title">Opalite — Your AI Media Library</div>
+      </div>
+      <div class="image-grid">
+        <div class="img-thumb"><div class="check">&#10003;</div></div>
+        <div class="img-thumb"></div>
+        <div class="img-thumb"><div class="check">&#10003;</div></div>
+        <div class="img-thumb"></div>
+        <div class="img-thumb"></div>
+        <div class="img-thumb"><div class="check">&#10003;</div></div>
+        <div class="img-thumb"></div>
+        <div class="img-thumb"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="asset-label">gemini-screenshot-2-features.png (1280×800)</div>
+<div class="screenshot features" id="gemini-ss2">
+  <div class="mesh"></div>
+  <div class="grid-bg"></div>
+  <div class="platform-label">
+    <div class="pl-icon">O</div>
+    <div class="pl-text">Gemini Suite</div>
+    <span class="pl-pipe">|</span>
+    <span class="pl-platform">by Opalite</span>
+  </div>
+  <div class="content">
+    <div class="feature-list">
+      <h2>Everything You Need<br>to <span class="grad">Manage AI Art</span></h2>
+      <div class="feature-item">
+        <div class="feature-icon">&#128247;</div>
+        <div>
+          <h3>One-Click Save</h3>
+          <p>Automatically detect and save images generated by Gemini — no manual downloads.</p>
+        </div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">&#9889;</div>
+        <div>
+          <h3>AI Upscaling</h3>
+          <p>Enhance image resolution up to 4x with built-in AI upscaler.</p>
+        </div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">&#128193;</div>
+        <div>
+          <h3>Cloud Organization</h3>
+          <p>Your entire AI image collection in one searchable library.</p>
+        </div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">&#128279;</div>
+        <div>
+          <h3>Easy Sharing</h3>
+          <p>Share directly from your dashboard. No re-uploading needed.</p>
+        </div>
+      </div>
+    </div>
+    <div class="feature-visual">
+      <div class="phone-frame">
+        <div class="popup-header">
+          <div class="popup-logo">O</div>
+          <div>
+            <div class="popup-title">Gemini Suite</div>
+            <div class="popup-sub">by Opalite Studios</div>
+          </div>
+        </div>
+        <div class="status-bar">
+          <div class="status-dot"></div>
+          <div class="status-text">Connected to Gemini</div>
+        </div>
+        <div class="stat-row">
+          <div class="stat-box">
+            <div class="stat-num">247</div>
+            <div class="stat-label">Images Saved</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-num">12</div>
+            <div class="stat-label">Upscaled</div>
+          </div>
+        </div>
+        <div class="action-btn">Open Dashboard</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="asset-label">gemini-screenshot-3-how-it-works.png (1280×800)</div>
+<div class="screenshot how-it-works" id="gemini-ss3">
+  <div class="mesh"></div>
+  <div class="grid-bg"></div>
+  <div class="platform-label">
+    <div class="pl-icon">O</div>
+    <div class="pl-text">Gemini Suite</div>
+    <span class="pl-pipe">|</span>
+    <span class="pl-platform">by Opalite</span>
+  </div>
+  <div class="content">
+    <h2>How <span class="grad">Gemini Suite</span> Works</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <h3>Generate Images</h3>
+        <p>Use Gemini, AI Studio, or Labs to create images as you normally would.</p>
+      </div>
+      <div class="step-connector">&#10132;</div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <h3>Auto-Detect & Save</h3>
+        <p>Gemini Suite detects new images and saves them to your Opalite library automatically.</p>
+      </div>
+      <div class="step-connector">&#10132;</div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <h3>Manage & Share</h3>
+        <p>Organize, upscale, and share your AI images from one unified dashboard.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="spacer"></div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- GROK SUITE                                            -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<h1>Grok Suite — Promo Tile (440×280)</h1>
+<div class="promo-tile" id="grok-promo">
+  <div class="accent-line"></div>
+  <div class="logo-mark">O</div>
+  <div class="ext-name"><span class="highlight">Grok</span> Suite</div>
+  <div class="tagline">Save AI images. Organize. Upscale. Share.</div>
+  <div class="by-opalite">by Opalite Studios</div>
+  <div class="badge">for xAI Grok</div>
+</div>
+
+<div class="asset-label">grok-screenshot-1-hero.png (1280×800)</div>
+<div class="screenshot hero" id="grok-ss1">
+  <div class="mesh"></div>
+  <div class="grid-bg"></div>
+  <div class="platform-label">
+    <div class="pl-icon">O</div>
+    <div class="pl-text">Grok Suite</div>
+    <span class="pl-pipe">|</span>
+    <span class="pl-platform">by Opalite</span>
+  </div>
+  <div class="content">
+    <div class="hero-badge">&#9889; Built for xAI Grok</div>
+    <h2>Save AI Images<br><span class="grad">In One Click</span></h2>
+    <div class="subtitle">Instantly save images generated by Grok to your Opalite cloud library. Organize, upscale, and share — all from one dashboard.</div>
+    <div class="ui-card">
+      <div class="card-header">
+        <div class="dot dot-r"></div>
+        <div class="dot dot-y"></div>
+        <div class="dot dot-g"></div>
+        <div class="card-title">Opalite — Your AI Media Library</div>
+      </div>
+      <div class="image-grid">
+        <div class="img-thumb"><div class="check">&#10003;</div></div>
+        <div class="img-thumb"></div>
+        <div class="img-thumb"></div>
+        <div class="img-thumb"><div class="check">&#10003;</div></div>
+        <div class="img-thumb"><div class="check">&#10003;</div></div>
+        <div class="img-thumb"></div>
+        <div class="img-thumb"></div>
+        <div class="img-thumb"><div class="check">&#10003;</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="asset-label">grok-screenshot-2-features.png (1280×800)</div>
+<div class="screenshot features" id="grok-ss2">
+  <div class="mesh"></div>
+  <div class="grid-bg"></div>
+  <div class="platform-label">
+    <div class="pl-icon">O</div>
+    <div class="pl-text">Grok Suite</div>
+    <span class="pl-pipe">|</span>
+    <span class="pl-platform">by Opalite</span>
+  </div>
+  <div class="content">
+    <div class="feature-list">
+      <h2>Everything You Need<br>to <span class="grad">Manage AI Art</span></h2>
+      <div class="feature-item">
+        <div class="feature-icon">&#128247;</div>
+        <div>
+          <h3>One-Click Save</h3>
+          <p>Automatically detect and save images generated by Grok — no manual downloads.</p>
+        </div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">&#9889;</div>
+        <div>
+          <h3>AI Upscaling</h3>
+          <p>Enhance image resolution up to 4x with built-in AI upscaler.</p>
+        </div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">&#128193;</div>
+        <div>
+          <h3>Cloud Organization</h3>
+          <p>Your entire AI image collection in one searchable library.</p>
+        </div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">&#128279;</div>
+        <div>
+          <h3>Easy Sharing</h3>
+          <p>Share directly from your dashboard. No re-uploading needed.</p>
+        </div>
+      </div>
+    </div>
+    <div class="feature-visual">
+      <div class="phone-frame">
+        <div class="popup-header">
+          <div class="popup-logo">O</div>
+          <div>
+            <div class="popup-title">Grok Suite</div>
+            <div class="popup-sub">by Opalite Studios</div>
+          </div>
+        </div>
+        <div class="status-bar">
+          <div class="status-dot"></div>
+          <div class="status-text">Connected to Grok</div>
+        </div>
+        <div class="stat-row">
+          <div class="stat-box">
+            <div class="stat-num">183</div>
+            <div class="stat-label">Images Saved</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-num">8</div>
+            <div class="stat-label">Upscaled</div>
+          </div>
+        </div>
+        <div class="action-btn">Open Dashboard</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="asset-label">grok-screenshot-3-how-it-works.png (1280×800)</div>
+<div class="screenshot how-it-works" id="grok-ss3">
+  <div class="mesh"></div>
+  <div class="grid-bg"></div>
+  <div class="platform-label">
+    <div class="pl-icon">O</div>
+    <div class="pl-text">Grok Suite</div>
+    <span class="pl-pipe">|</span>
+    <span class="pl-platform">by Opalite</span>
+  </div>
+  <div class="content">
+    <h2>How <span class="grad">Grok Suite</span> Works</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <h3>Generate Images</h3>
+        <p>Use Grok to create AI images as you normally would on grok.com.</p>
+      </div>
+      <div class="step-connector">&#10132;</div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <h3>Auto-Detect & Save</h3>
+        <p>Grok Suite detects new images and saves them to your Opalite library automatically.</p>
+      </div>
+      <div class="step-connector">&#10132;</div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <h3>Manage & Share</h3>
+        <p>Organize, upscale, and share your AI images from one unified dashboard.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="spacer"></div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- CHATGPT SUITE                                         -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<h1>ChatGPT Suite — Promo Tile (440×280)</h1>
+<div class="promo-tile" id="chatgpt-promo">
+  <div class="accent-line"></div>
+  <div class="logo-mark">O</div>
+  <div class="ext-name"><span class="highlight">ChatGPT</span> Suite</div>
+  <div class="tagline">Save AI images. Organize. Upscale. Share.</div>
+  <div class="by-opalite">by Opalite Studios</div>
+  <div class="badge">for ChatGPT &amp; DALL-E</div>
+</div>
+
+<div class="asset-label">chatgpt-screenshot-1-hero.png (1280×800)</div>
+<div class="screenshot hero" id="chatgpt-ss1">
+  <div class="mesh"></div>
+  <div class="grid-bg"></div>
+  <div class="platform-label">
+    <div class="pl-icon">O</div>
+    <div class="pl-text">ChatGPT Suite</div>
+    <span class="pl-pipe">|</span>
+    <span class="pl-platform">by Opalite</span>
+  </div>
+  <div class="content">
+    <div class="hero-badge">&#128640; Built for ChatGPT &amp; DALL-E</div>
+    <h2>Save AI Images<br><span class="grad">In One Click</span></h2>
+    <div class="subtitle">Instantly save images from ChatGPT, DALL-E, and Sora to your Opalite cloud library. Organize, upscale, and share — all from one dashboard.</div>
+    <div class="ui-card">
+      <div class="card-header">
+        <div class="dot dot-r"></div>
+        <div class="dot dot-y"></div>
+        <div class="dot dot-g"></div>
+        <div class="card-title">Opalite — Your AI Media Library</div>
+      </div>
+      <div class="image-grid">
+        <div class="img-thumb"></div>
+        <div class="img-thumb"><div class="check">&#10003;</div></div>
+        <div class="img-thumb"><div class="check">&#10003;</div></div>
+        <div class="img-thumb"></div>
+        <div class="img-thumb"><div class="check">&#10003;</div></div>
+        <div class="img-thumb"></div>
+        <div class="img-thumb"></div>
+        <div class="img-thumb"><div class="check">&#10003;</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="asset-label">chatgpt-screenshot-2-features.png (1280×800)</div>
+<div class="screenshot features" id="chatgpt-ss2">
+  <div class="mesh"></div>
+  <div class="grid-bg"></div>
+  <div class="platform-label">
+    <div class="pl-icon">O</div>
+    <div class="pl-text">ChatGPT Suite</div>
+    <span class="pl-pipe">|</span>
+    <span class="pl-platform">by Opalite</span>
+  </div>
+  <div class="content">
+    <div class="feature-list">
+      <h2>Everything You Need<br>to <span class="grad">Manage AI Art</span></h2>
+      <div class="feature-item">
+        <div class="feature-icon">&#128247;</div>
+        <div>
+          <h3>One-Click Save</h3>
+          <p>Automatically detect and save images from ChatGPT &amp; DALL-E — no manual downloads.</p>
+        </div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">&#9889;</div>
+        <div>
+          <h3>AI Upscaling</h3>
+          <p>Enhance image resolution up to 4x with built-in AI upscaler.</p>
+        </div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">&#128193;</div>
+        <div>
+          <h3>Cloud Organization</h3>
+          <p>Your entire AI image collection in one searchable library.</p>
+        </div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">&#128279;</div>
+        <div>
+          <h3>Easy Sharing</h3>
+          <p>Share directly from your dashboard. No re-uploading needed.</p>
+        </div>
+      </div>
+    </div>
+    <div class="feature-visual">
+      <div class="phone-frame">
+        <div class="popup-header">
+          <div class="popup-logo">O</div>
+          <div>
+            <div class="popup-title">ChatGPT Suite</div>
+            <div class="popup-sub">by Opalite Studios</div>
+          </div>
+        </div>
+        <div class="status-bar">
+          <div class="status-dot"></div>
+          <div class="status-text">Connected to ChatGPT</div>
+        </div>
+        <div class="stat-row">
+          <div class="stat-box">
+            <div class="stat-num">312</div>
+            <div class="stat-label">Images Saved</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-num">15</div>
+            <div class="stat-label">Upscaled</div>
+          </div>
+        </div>
+        <div class="action-btn">Open Dashboard</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="asset-label">chatgpt-screenshot-3-how-it-works.png (1280×800)</div>
+<div class="screenshot how-it-works" id="chatgpt-ss3">
+  <div class="mesh"></div>
+  <div class="grid-bg"></div>
+  <div class="platform-label">
+    <div class="pl-icon">O</div>
+    <div class="pl-text">ChatGPT Suite</div>
+    <span class="pl-pipe">|</span>
+    <span class="pl-platform">by Opalite</span>
+  </div>
+  <div class="content">
+    <h2>How <span class="grad">ChatGPT Suite</span> Works</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <h3>Generate Images</h3>
+        <p>Use ChatGPT, DALL-E, or Sora to create AI images as you normally would.</p>
+      </div>
+      <div class="step-connector">&#10132;</div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <h3>Auto-Detect & Save</h3>
+        <p>ChatGPT Suite detects new images and saves them to your Opalite library automatically.</p>
+      </div>
+      <div class="step-connector">&#10132;</div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <h3>Manage & Share</h3>
+        <p>Organize, upscale, and share your AI images from one unified dashboard.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

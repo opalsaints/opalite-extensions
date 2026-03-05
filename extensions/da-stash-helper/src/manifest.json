@@ -1,0 +1,32 @@
+{
+  "manifest_version": 3,
+  "name": "DA Stash Helper",
+  "version": "2.0.0",
+  "description": "Bulk automation tools for DeviantArt Stash — schedule, tier, and edit operations",
+  "permissions": ["storage", "tabs", "activeTab"],
+  "host_permissions": ["https://*.deviantart.com/*", "https://sta.sh/*"],
+  "background": {
+    "service_worker": "src/entrypoints/service-worker.ts",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://*.deviantart.com/*", "https://sta.sh/*"],
+      "js": ["src/entrypoints/content-script.ts"],
+      "run_at": "document_idle"
+    }
+  ],
+  "action": {
+    "default_title": "DA Stash Helper",
+    "default_icon": {
+      "16": "public/icons/icon-16.png",
+      "48": "public/icons/icon-48.png",
+      "128": "public/icons/icon-128.png"
+    }
+  },
+  "icons": {
+    "16": "public/icons/icon-16.png",
+    "48": "public/icons/icon-48.png",
+    "128": "public/icons/icon-128.png"
+  }
+}

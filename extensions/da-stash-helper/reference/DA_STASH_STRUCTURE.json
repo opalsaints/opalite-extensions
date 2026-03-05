@@ -1,0 +1,607 @@
+{
+  "_meta": {
+    "description": "Generalized DeviantArt Stash DOM structure map. Account-agnostic — documents interaction chains, form elements, selectors, and navigation patterns that work for any DA user.",
+    "generatedFrom": "Playwright explore.ts Rounds 30-31 (2026-03-04)",
+    "version": "1.1.0",
+    "notes": "DA uses hashed CSS class names that change on deploy. All selectors use ARIA roles, text content, and structural patterns only."
+  },
+
+  "pages": {
+    "stash": {
+      "url": "/stash/",
+      "description": "Main stash page — all uploaded items (not yet published)",
+      "itemsPerPage": 50,
+      "pagination": {
+        "buttons": [
+          { "ariaLabel": "First page", "selector": "button[aria-label='First page']" },
+          { "ariaLabel": "Previous page", "selector": "button[aria-label='Previous page']" },
+          { "ariaLabel": "Next page", "selector": "button[aria-label='Next page']" },
+          { "ariaLabel": "Last page", "selector": "button[aria-label='Last page']" }
+        ],
+        "totalItemsPattern": "/(\\d+)\\s*-\\s*(\\d+)\\s*of\\s*(\\d+)/",
+        "note": "Pagination text like '1 - 50 of 527' appears in page body text"
+      }
+    },
+    "studio": {
+      "url": "/studio",
+      "description": "My Studio — drafts, published, tools",
+      "tabs": ["Media", "Literature", "Journals", "Scheduled"]
+    },
+    "studioPublished": {
+      "url": "/studio/published",
+      "description": "Published deviations",
+      "tabs": ["Deviations", "Posts", "Galleries"]
+    },
+    "studioPublishedGalleries": {
+      "url": "/studio/published/galleries",
+      "description": "Gallery and subscription tier management page",
+      "sections": [
+        {
+          "name": "Subscriptions",
+          "linkPattern": "/studio/tier/{tierId}/deviations",
+          "createButton": "Create New Tier"
+        },
+        {
+          "name": "Galleries",
+          "linkPattern": "/studio/published/{galleryId}",
+          "createButton": "Create New Gallery",
+          "notes": "Premium galleries have a 'Premium' badge. 'Featured' is the default locked gallery."
+        }
+      ]
+    },
+    "submitDeviation": {
+      "url": "/_deviation_submit/",
+      "urlWithId": "/_deviation_submit/?deviationid={deviationId}",
+      "description": "Full submit/edit page for a single deviation"
+    }
+  },
+
+  "sidebarNavigation": {
+    "description": "Left sidebar navigation links present on stash and studio pages",
+    "links": [
+      { "text": "Drafts", "url": "/studio" },
+      { "text": "Published", "url": "/studio/published" },
+      { "text": "Tools", "url": "/studio/dreamup" },
+      { "text": "Sta.sh", "url": "/stash" },
+      { "text": "Products", "url": "/studio/shop-products" },
+      { "text": "Analytics", "url": "/studio/shop-reports" },
+      { "text": "Discounts", "url": "/studio/discounts/all" },
+      { "text": "Earnings", "url": "/studio/earnings" }
+    ],
+    "presetsButton": {
+      "text": "Presets",
+      "location": "Under 'My Studio' heading in sidebar",
+      "element": "button (no href, no aria-expanded, no aria-haspopup)",
+      "behavior": "Unknown — click produces no visible effect. May trigger a React state change not visible in DOM.",
+      "investigationNeeded": true
+    }
+  },
+
+  "stashLayout": {
+    "viewModes": {
+      "list": {
+        "description": "Default list view with rows",
+        "itemSelector": "li (containing input[type='checkbox'][aria-label='Select'])",
+        "itemElements": {
+          "checkbox": "input[type='checkbox'][aria-label='Select']",
+          "thumbnail": "img (within item li)",
+          "title": "img[alt] or first substantial button text",
+          "stashLink": "a[href*='/stash/0']",
+          "datePattern": "/(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\\s+\\d/",
+          "labels": ["NoAI", "AI-Generated", "Created using AI", "Mature"],
+          "tags": "[data-tagname] elements",
+          "viewCount": "/(\\d+)\\s*View/"
+        }
+      },
+      "grid": {
+        "description": "Grid view with thumbnails",
+        "toggleButton": "button containing text 'Grid' (when in list) or 'List' (when in grid)",
+        "gridLayout": {
+          "columns": "5 (typical)",
+          "itemSelector": "div containing input[type='checkbox'][aria-label='Select']"
+        },
+        "overlayButtons": ["More", "Edit", "Copy Link"],
+        "note": "Overlay buttons appear on hover"
+      }
+    },
+
+    "toolbar": {
+      "location": "Sticky div at top of content area",
+      "selectAllCheckbox": "First input[type='checkbox'] inside sticky div",
+      "selectionCountPattern": "/(\\d+)\\s*Selected/",
+
+      "singleItemButtons": ["Edit", "Label options", "More actions", "Schedule", "Submit 1 Deviation"],
+      "multiItemButtons": ["Edit", "Label options", "More actions", "Schedule", "Submit N Deviations"],
+      "note": "Submit button text changes with selection count"
+    },
+
+    "folders": {
+      "detection": {
+        "treeNavLinks": "a[href*='/stash/2'] in sidebar/tree navigation (folder URLs start with /stash/2)",
+        "createButton": "Button or link with text 'Create New Folder'",
+        "note": "Folders have stash IDs starting with '2', items start with '0'"
+      },
+      "insideFolder": {
+        "extraToolbarButtons": ["Create sub folder with all selected"],
+        "perItemMoreMenu": {
+          "extraItems": ["Share Folder", "Edit Folder", "Download as ZIP", "Add to Shortcuts", "Delete Folder"],
+          "moveFolderSubmenu": "Shows parent folder ('Move Up') and sibling folders as destinations"
+        }
+      }
+    },
+
+    "headerSubmitMenu": {
+      "description": "Persistent tiny +Submit menu in the page header (2x2 px collapsed)",
+      "selector": "[role='menu'] with small dimensions (<10px)",
+      "items": [
+        { "text": "Deviation", "description": "Submit your art" },
+        { "text": "Dream Up", "description": "Generate AI work" },
+        { "text": "Status Update", "description": "Post an update" },
+        { "text": "Journal", "description": "Post a journal" },
+        { "text": "Literature", "description": "Submit writing" },
+        { "text": "Subscription", "description": "Create subscription tiers" }
+      ]
+    }
+  },
+
+  "toolbarDropdowns": {
+    "edit": {
+      "triggerButton": "Edit",
+      "menuItems": [
+        {
+          "name": "Title",
+          "formElements": [
+            { "type": "select", "options": ["Insert at the beginning", "Insert at the end", "Replace entirely"] },
+            { "type": "input", "placeholder": "New Title", "maxLength": 50 }
+          ],
+          "toolbarTransform": ["Cancel", "Save Changes"],
+          "saveFlow": "Save Changes → 'Update All' confirmation modal",
+          "restoreFlow": "Cancel button"
+        },
+        {
+          "name": "Tags",
+          "formElements": [
+            { "type": "select", "options": ["Add", "Remove", "Replace all"] },
+            { "type": "combobox", "id": "#autocomplete-_r_d_", "description": "Tag autocomplete input" }
+          ],
+          "toolbarTransform": ["Cancel", "Save Changes"],
+          "saveFlow": "Save Changes → 'Update All' confirmation modal"
+        },
+        {
+          "name": "Description",
+          "formElements": [
+            { "type": "rich-editor", "placeholder": "How about some backstory? Add some pizzazz!", "editorType": "ProseMirror/TipTap" }
+          ],
+          "toolbarTransform": ["Cancel", "Save Changes", "(formatting buttons)"],
+          "saveFlow": "Save Changes → 'Update All' confirmation modal"
+        },
+        {
+          "name": "Gallery",
+          "formElements": [
+            { "type": "combobox", "placeholder": "Select a gallery", "description": "Multi-select combobox with checkboxes for each gallery" }
+          ],
+          "toolbarTransform": ["Cancel", "Save Changes"],
+          "saveFlow": "Save Changes → 'Update All' confirmation modal",
+          "note": "Shows all user galleries with checkboxes. User's galleries are dynamic."
+        },
+        {
+          "name": "Subscription tier",
+          "formElements": [
+            { "type": "combobox", "placeholder": "Select a tier", "description": "Combobox to assign items to a subscription tier" }
+          ],
+          "toolbarTransform": ["Cancel", "Save Changes"],
+          "saveFlow": "Save Changes → 'Update All' confirmation modal",
+          "note": "Shows user's subscription tiers. Tiers are dynamic."
+        },
+        {
+          "name": "Display options",
+          "formElements": [
+            {
+              "type": "select",
+              "options": ["Original size", "Max size: 400px pixels wide", "Max size: 600px pixels wide", "Max size: 800px pixels wide", "Max size: 900px pixels wide", "Max size: 1024px pixels wide", "Max size: 1280px pixels wide", "Max size: 1600px pixels wide", "Max size: 1920px pixels wide"]
+            },
+            { "type": "toggle", "id": "#watermark", "label": "Watermark" }
+          ],
+          "toolbarTransform": ["Cancel", "Save Changes"]
+        },
+        {
+          "name": "License",
+          "formElements": [
+            { "type": "radio-group", "name": "license_cc", "description": "Creative Commons toggle" },
+            { "type": "radio-group", "name": "license_attr", "description": "Attribution requirement" },
+            { "type": "radio-group", "name": "license_deriv", "description": "Derivative works permission" }
+          ],
+          "toolbarTransform": ["Cancel", "Save Changes"]
+        },
+        {
+          "name": "Commenting",
+          "formElements": [
+            { "type": "radio-group", "name": "allowComments", "description": "Enable/disable comments" }
+          ],
+          "toolbarTransform": ["Cancel", "Save Changes"]
+        },
+        {
+          "name": "Deviation details",
+          "formElements": [
+            { "type": "select", "options": ["Select", "Model", "Object", "Character", "Artist", "Other"], "description": "Subject type" },
+            { "type": "input", "id": "#label-name-0", "description": "Subject name" }
+          ],
+          "toolbarTransform": ["Cancel", "Save Changes", "Add more"]
+        },
+        {
+          "name": "Preset template",
+          "formElements": [
+            { "type": "select", "description": "User's saved preset templates (dynamic list)" }
+          ],
+          "toolbarTransform": ["Cancel", "Save Changes"],
+          "note": "Preset templates are user-created. First option is always 'Select'."
+        }
+      ]
+    },
+
+    "labelOptions": {
+      "triggerButton": "Label options",
+      "menuItems": [
+        { "name": "Add Created using AI label", "toggle": "Remove Created using AI label" },
+        { "name": "Remove Created using AI label", "toggle": "Add Created using AI label" },
+        { "name": "Add NoAI label", "toggle": "Remove NoAI label" },
+        { "name": "Remove NoAI label", "toggle": "Add NoAI label" },
+        { "name": "Add Mature label", "toggle": "Remove Mature label" },
+        { "name": "Remove Mature label", "toggle": "Add Mature label" }
+      ],
+      "confirmationFlow": "Click → confirmation toast/modal → toolbar returns to base state"
+    },
+
+    "moreActions": {
+      "triggerButton": "More actions",
+      "menuItems": [
+        { "name": "Sell selected", "description": "Set price for selected items" },
+        {
+          "name": "Move to folder",
+          "hasSubmenu": true,
+          "submenuItems": ["(dynamic list of user's folders)"],
+          "note": "Shows existing folders as move destinations"
+        },
+        { "name": "Create folder with all selected", "description": "Creates a new folder containing selected items" },
+        { "name": "Merge into Multi-Image Deviation", "description": "Combines selected items into a single multi-image deviation" },
+        { "name": "Schedule", "description": "Schedule publication of selected items" },
+        {
+          "name": "Delete forever",
+          "description": "Permanently delete selected items",
+          "destructive": true,
+          "confirmationModal": "Are you sure? → 'Delete All' button"
+        }
+      ]
+    }
+  },
+
+  "directButtons": {
+    "schedule": {
+      "buttonText": "Schedule",
+      "behavior": "Only visible as standalone toolbar button when multiple items are selected. Otherwise available via More actions dropdown.",
+      "resultType": "only-in-dropdown (in tested configuration)"
+    },
+    "submit": {
+      "buttonPattern": "Submit N Deviation(s)",
+      "behavior": "Navigates to /_deviation_submit/ page with selected item(s)",
+      "resultType": "navigation"
+    }
+  },
+
+  "perItemButtons": {
+    "description": "Buttons that appear when hovering over a stash item",
+
+    "listMode": {
+      "directButtons": [
+        { "text": "(title)", "description": "Clickable title — opens item detail page" },
+        { "text": "+ Add Tags", "description": "Opens full edit dialog (same as per-item Edit)" },
+        { "text": "Copy Link", "description": "Copies stash URL to clipboard" },
+        { "text": "Edit", "description": "Opens submit/edit dialog for single item" },
+        { "text": "View", "description": "Navigates to item's stash detail page" },
+        { "text": "More", "description": "Opens context menu with additional options" }
+      ]
+    },
+
+    "gridMode": {
+      "overlayButtons": ["More", "Edit", "Copy Link"],
+      "note": "Fewer buttons visible in grid overlay"
+    },
+
+    "moreContextMenu": {
+      "items": [
+        {
+          "name": "Order",
+          "hasSubmenu": true,
+          "submenuItems": ["Send to Top", "Send to Bottom", "Move Up", "Move Down"]
+        },
+        {
+          "name": "Move to Folder",
+          "hasSubmenu": true,
+          "submenuItems": ["Move Up", "(dynamic folder list)"],
+          "note": "Inside folders, 'Move Up' moves item to parent. Sibling folders shown as destinations."
+        },
+        { "name": "View", "description": "Navigate to item detail page" },
+        { "name": "Edit", "description": "Opens submit/edit dialog" },
+        { "name": "Copy Link", "description": "Copies stash URL to clipboard" },
+        {
+          "name": "Sell / Edit Sale",
+          "description": "Set or modify sale price. Shows 'Sell' if not on sale, 'Edit Sale' if already on sale.",
+          "stateDependentLabel": true,
+          "editSaleDialog": "Shows 'End this sale?' dialog with 'Never Mind' and 'End Sale' buttons"
+        },
+        {
+          "name": "Schedule",
+          "description": "Schedule publication date/time",
+          "dialog": {
+            "title": "Schedule Draft",
+            "formElements": [
+              { "type": "select", "label": "Select time", "options": "24 hours (12 AM through 11 PM)" }
+            ],
+            "buttons": ["Cancel", "Confirm Schedule"]
+          }
+        },
+        {
+          "name": "Delete",
+          "description": "Delete single item",
+          "destructive": true
+        }
+      ],
+
+      "folderSpecificItems": [
+        { "name": "Share Folder", "description": "Copies folder URL to clipboard" },
+        { "name": "Edit Folder", "description": "Opens folder edit dialog with 'Update' confirmation" },
+        { "name": "Download as ZIP", "description": "Downloads folder contents as ZIP" },
+        { "name": "Add to Shortcuts / Remove From Shortcuts", "stateDependentLabel": true },
+        { "name": "Delete Folder", "description": "Delete folder (destructive)", "destructive": true }
+      ]
+    }
+  },
+
+  "editDialog": {
+    "description": "Full submit/edit dialog opened via per-item Edit or + Add Tags buttons",
+    "formElements": [
+      { "type": "input", "placeholder": "Add your title here", "description": "Deviation title" },
+      { "type": "input", "label": "Mature", "description": "Mature content toggle" },
+      { "type": "input", "label": "NoAI", "description": "NoAI label toggle" },
+      { "type": "input", "label": "Created using AI tools", "description": "AI-generated label toggle" },
+      { "type": "input", "placeholder": "E.g.: rose, watercolor, painting, fanart, tutorial", "description": "Tags input" },
+      { "type": "input", "label": "Add watermark", "description": "Watermark toggle (image items only)" },
+      { "type": "input", "label": "Add files", "description": "Additional file upload" },
+      { "type": "input", "label": "Replace image", "description": "Replace item image" },
+      {
+        "type": "select",
+        "description": "Display size selector",
+        "options": ["Original", "Size: 400px wide", "Size: 600px wide", "Size: 800px wide", "Size: 900px wide", "Size: 1024px wide", "Size: 1280px wide", "Size: 1600px wide"]
+      },
+      {
+        "type": "rich-editor",
+        "placeholder": "Introduce your deviation. How about some backstory? Add some pizzazz!",
+        "editorType": "ProseMirror/TipTap"
+      },
+      { "type": "combobox", "label": "Tags", "description": "Tag autocomplete combobox" },
+      { "type": "combobox", "label": "Gallery", "description": "Gallery multi-select combobox (dynamic — user's galleries)" },
+      { "type": "combobox", "label": "Which tiers do you want to add this deviation to?", "description": "Subscription tier combobox (dynamic — user's tiers)" },
+      { "type": "combobox", "label": "Submit to Premium Gallery", "description": "Premium gallery combobox (dynamic — user's premium galleries)" }
+    ],
+    "advancedSettings": {
+      "expandable": true,
+      "sections": [
+        { "name": "Deviation details", "description": "Subject type and name (Add button)" },
+        { "name": "Creative Works licensing", "description": "CC license options (Add button)" },
+        { "name": "Copyright year", "description": "Auto-filled with current year" },
+        { "name": "Legal documentation", "description": "Additional legal docs (Add button)" },
+        { "name": "Disable comments", "type": "toggle" },
+        { "name": "Skip gallery and submit to Scraps", "type": "toggle" }
+      ]
+    }
+  },
+
+  "selectors": {
+    "description": "Reliable non-class selectors for key elements",
+    "stashItems": {
+      "listMode": "li:has(input[type='checkbox'][aria-label='Select'])",
+      "gridMode": "div containing input[type='checkbox'][aria-label='Select']",
+      "itemCheckbox": "input[type='checkbox'][aria-label='Select']",
+      "itemLink": "a[href*='/stash/0']",
+      "folderLink": "a[href*='/stash/2']"
+    },
+    "toolbar": {
+      "stickyContainer": "div with position: sticky containing input[type='checkbox']",
+      "selectAllCheckbox": "First checkbox inside sticky toolbar div",
+      "dropdownTrigger": "button containing text '{buttonName}'",
+      "menuItem": "[role='menuitem']",
+      "menuContainer": "[role='menu']",
+      "cancelButton": "button with text 'Cancel'",
+      "saveButton": "button with text 'Save Changes'",
+      "confirmButton": "button with text matching /Update All|Delete All|Confirm/"
+    },
+    "pagination": {
+      "firstPage": "button[aria-label='First page']",
+      "previousPage": "button[aria-label='Previous page']",
+      "nextPage": "button[aria-label='Next page']",
+      "lastPage": "button[aria-label='Last page']"
+    },
+    "viewToggle": "button containing text 'Grid' or 'List'",
+    "modalDialog": "[role='dialog'], [role='alertdialog']",
+    "comboboxListbox": "[role='listbox']",
+    "richEditor": "[contenteditable='true'][role='textbox']"
+  },
+
+  "urlPatterns": {
+    "stashItem": "/stash/0{base36hash}",
+    "stashFolder": "/stash/2{base36hash}",
+    "galleryPage": "/studio/published/{galleryId}",
+    "tierPage": "/studio/tier/{tierId}/deviations",
+    "submitPage": "/_deviation_submit/?deviationid={deviationId}",
+    "note": "Item stash IDs start with '0', folder IDs start with '2'. Both use base36 alphanumeric hashes."
+  },
+
+  "interactionPatterns": {
+    "toolbarDropdownFlow": {
+      "steps": [
+        "1. Select item(s) using checkbox(es)",
+        "2. Click dropdown trigger button (Edit, Label options, More actions)",
+        "3. Menu appears with [role='menu'] containing [role='menuitem'] elements",
+        "4. Click desired menuitem",
+        "5. Toolbar transforms to show form elements + Cancel + Save Changes",
+        "6. Fill form elements",
+        "7. Click 'Save Changes'",
+        "8. Confirmation modal appears (e.g. 'Update All')",
+        "9. Click confirmation button",
+        "10. Toolbar returns to base state"
+      ],
+      "cancellation": "Click 'Cancel' at step 5-6 to restore toolbar without saving",
+      "menuDismissal": "Press Escape to close menu without selecting"
+    },
+
+    "perItemHoverFlow": {
+      "steps": [
+        "1. Hover over item (in list or grid mode)",
+        "2. Action buttons appear (Edit, Copy Link, View, More)",
+        "3. Click desired button",
+        "4. Handle result (dialog, navigation, clipboard, or context menu)"
+      ]
+    },
+
+    "perItemMoreMenuFlow": {
+      "steps": [
+        "1. Hover over item",
+        "2. Click 'More' button",
+        "3. Context menu appears with [role='menu']",
+        "4. Some items have submenus (Order, Move to Folder) — hover to expand",
+        "5. Click desired action",
+        "6. Handle result (dialog, navigation, action confirmation)"
+      ],
+      "submenuDetection": "Submenu items are sibling DIV containers in the DOM, already rendered but visually hidden"
+    },
+
+    "paginationFlow": {
+      "steps": [
+        "1. Check total items via 'X - Y of Z' text pattern",
+        "2. Click Next page / Previous page / First page / Last page buttons",
+        "3. Wait for page content to load (checkboxes appear)",
+        "4. Items on new page are ready for interaction"
+      ]
+    },
+
+    "folderNavigation": {
+      "steps": [
+        "1. Folders appear in sidebar tree navigation (links starting with /stash/2)",
+        "2. Click folder link to navigate inside",
+        "3. Folder has same toolbar + items structure as root stash",
+        "4. Additional buttons available: Create sub folder, Move to Folder (with parent folder option)",
+        "5. Navigate back via breadcrumb or stash root link"
+      ]
+    }
+  },
+
+  "reactPortals": {
+    "description": "DA uses React portals — menus and dialogs render outside the toolbar DOM tree",
+    "menuLocation": "[role='menu'] elements on document.body (not inside toolbar)",
+    "dialogLocation": "[role='dialog'] elements on document.body",
+    "tinyHeaderMenu": "The +Submit header menu is a [role='menu'] with dimensions ≤10×10 px. Skip when looking for context menus.",
+    "menuIdentification": "Use the last visible [role='menu'] with reasonable dimensions (>10px) and menu items count <20"
+  },
+
+  "userConfigCapture": {
+    "description": "User-specific configuration captured from the galleries/tiers page. Needed for dynamically populating dropdowns, validating tier assignments, etc.",
+    "sourceUrl": "/studio/published/galleries",
+
+    "galleries": {
+      "linkPattern": "/studio/published/{galleryId}",
+      "cardStructure": {
+        "description": "Gallery card is an <a> tag containing child DIVs",
+        "children": [
+          "DIV (thumbnail image)",
+          "DIV (optional 'Premium' badge — only present on premium galleries)",
+          "DIV containing: <span>GalleryName</span><span>N deviations</span>"
+        ]
+      },
+      "extractionStrategy": {
+        "name": "Find first <span> inside link whose text is NOT 'N deviations' and NOT 'Premium'",
+        "deviationCount": "Find <span> matching /^\\d+\\s*deviations?$/i — parse the number",
+        "isPremium": "Check link's direct children for a child whose textContent is exactly 'Premium'",
+        "isDefault": "Gallery named 'Featured' is the default (cannot be deleted)",
+        "galleryId": "Extracted from URL: /studio/published/{galleryId}"
+      },
+      "createButton": {
+        "text": "Create New Gallery",
+        "selector": "button or a with text containing 'Create New Gallery'"
+      }
+    },
+
+    "subscriptionTiers": {
+      "linkPattern": "/studio/tier/{tierId}/deviations",
+      "cardStructure": {
+        "description": "Tier card is an <a> tag with same structure as gallery cards",
+        "children": [
+          "DIV (thumbnail image)",
+          "DIV containing: <span>TierName</span><span>N deviations</span>"
+        ]
+      },
+      "extractionStrategy": {
+        "name": "Same span-based strategy as galleries",
+        "deviationCount": "Same span-based strategy as galleries",
+        "tierId": "Extracted from URL: /studio/tier/{tierId}/deviations"
+      },
+      "createButton": {
+        "text": "Create New Tier",
+        "selector": "button or a with text containing 'Create New Tier'"
+      }
+    },
+
+    "folderCreation": {
+      "stashPage": {
+        "createNewFolderButton": "Button with text 'Create New Folder' on stash root page",
+        "createSubFolderInMoreActions": "Menu item 'Create sub folder with all selected' in More actions dropdown (only inside folders)"
+      }
+    },
+
+    "sidebarLinks": {
+      "selector": "nav a, aside a",
+      "expectedLinks": [
+        "My Studio → /studio/home",
+        "Drafts → /studio",
+        "Published → /studio/published",
+        "Tools → /studio/dreamup",
+        "Sta.sh → /stash",
+        "Products → /studio/shop-products",
+        "Analytics → /studio/shop-reports",
+        "Discounts → /studio/discounts/all",
+        "Earnings → /studio/earnings",
+        "Get more storage → /core-membership/buy"
+      ],
+      "dynamicLinks": [
+        "{username}'s avatar → /{username}",
+        "{folderName} → /stash/{folderId} (folder shortcuts)"
+      ]
+    },
+
+    "studioTabs": {
+      "selector": "[role='tablist'] [role='tab']",
+      "expectedTabs": ["Published", "Deviations", "Posts", "Galleries"],
+      "note": "Only read tabs inside [role='tablist'] containers — standalone [role='tab'] elements may be gallery cards"
+    }
+  },
+
+  "technicalNotes": {
+    "esbuildKeepNamesWorkaround": {
+      "problem": "tsx (esbuild) with keepNames:true wraps function expressions in __name() calls. Inside page.evaluate(), __name doesn't exist in browser context → ReferenceError.",
+      "affectedPatterns": [
+        "var fn = function(x) {} → __name(fn, 'fn') ✗",
+        "var fn = (x) => {} → __name(fn, 'fn') ✗",
+        "function fn(x) {} → __name(fn, 'fn') ✗"
+      ],
+      "safePattern": "var fn = [function(x) { ... }][0]; // Array trick — esbuild can't name-wrap",
+      "scope": "Only affects code inside page.evaluate() callbacks — Node.js context has __name defined"
+    },
+    "forOfLoopsInEvaluate": {
+      "problem": "for...of loops inside page.evaluate may trigger esbuild helpers not available in browser",
+      "safePattern": "Use indexed for loops: for (var i = 0; i < arr.length; i++) { var item = arr[i]; }"
+    },
+    "reactHashedClasses": {
+      "problem": "DA uses hashed CSS class names (e.g., _3xK2a) that change on every deploy",
+      "solution": "Never use class selectors. Use ARIA roles, text content, structural selectors, and data attributes only."
+    }
+  }
+}

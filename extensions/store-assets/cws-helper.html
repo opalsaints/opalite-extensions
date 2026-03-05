@@ -1,0 +1,1076 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>CWS Listing Helper — Opalite Extensions</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0f0f14; color: #e5e7eb; line-height: 1.6; }
+
+  .header {
+    background: linear-gradient(135deg, #0B0C10, #1a1a2e);
+    border-bottom: 1px solid #1f2937;
+    padding: 24px 40px;
+    position: sticky; top: 0; z-index: 100;
+  }
+  .header h1 { font-size: 20px; font-weight: 700; }
+  .header h1 span {
+    background: linear-gradient(90deg, #f43f5e, #f97316, #eab308);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .header p { font-size: 13px; color: #6b7280; margin-top: 4px; }
+
+  .tabs {
+    display: flex; gap: 0; background: #111827; border-bottom: 1px solid #1f2937;
+    position: sticky; top: 76px; z-index: 99;
+  }
+  .tab {
+    padding: 14px 28px; font-size: 14px; font-weight: 500; cursor: pointer;
+    color: #6b7280; border-bottom: 2px solid transparent; transition: all 0.2s;
+  }
+  .tab:hover { color: #d1d5db; }
+  .tab.active { color: #f43f5e; border-bottom-color: #f43f5e; }
+
+  .content { max-width: 900px; margin: 0 auto; padding: 40px; }
+
+  .ext-section { display: none; }
+  .ext-section.active { display: block; }
+
+  .card {
+    background: #111827; border: 1px solid #1f2937; border-radius: 12px;
+    padding: 24px; margin-bottom: 24px;
+  }
+  .card h2 {
+    font-size: 16px; font-weight: 600; margin-bottom: 4px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .card h2 .badge {
+    font-size: 10px; background: rgba(244,63,94,0.15); color: #f43f5e;
+    padding: 2px 8px; border-radius: 10px; font-weight: 500;
+  }
+  .card .hint { font-size: 12px; color: #6b7280; margin-bottom: 16px; }
+
+  .field { margin-bottom: 20px; }
+  .field label {
+    display: block; font-size: 12px; font-weight: 600; color: #9ca3af;
+    text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;
+  }
+  .field .copy-box {
+    background: #0B0C10; border: 1px solid #1f2937; border-radius: 8px;
+    padding: 12px 16px; font-size: 13px; color: #e5e7eb; line-height: 1.6;
+    position: relative; cursor: pointer; transition: border-color 0.2s;
+    white-space: pre-wrap; font-family: inherit;
+  }
+  .field .copy-box:hover { border-color: #f43f5e; }
+  .field .copy-box::after {
+    content: 'Click to copy';
+    position: absolute; top: 8px; right: 12px;
+    font-size: 10px; color: #6b7280; background: #1f2937;
+    padding: 2px 8px; border-radius: 4px;
+  }
+  .field .copy-box.copied { border-color: #22c55e; }
+  .field .copy-box.copied::after { content: 'Copied!'; color: #22c55e; background: rgba(34,197,94,0.1); }
+
+  .image-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+  }
+  .image-card {
+    background: #0B0C10; border: 1px solid #1f2937; border-radius: 8px;
+    overflow: hidden;
+  }
+  .image-card img {
+    width: 100%; height: auto; display: block;
+    border-bottom: 1px solid #1f2937;
+  }
+  .image-card .img-info {
+    padding: 10px 12px; display: flex; justify-content: space-between; align-items: center;
+  }
+  .image-card .img-label { font-size: 12px; color: #9ca3af; }
+  .image-card .img-dims { font-size: 11px; color: #6b7280; font-family: monospace; }
+  .image-card .open-btn {
+    font-size: 11px; color: #f43f5e; background: rgba(244,63,94,0.1);
+    border: 1px solid rgba(244,63,94,0.2); border-radius: 6px;
+    padding: 4px 10px; cursor: pointer; text-decoration: none;
+  }
+  .image-card .dl-btn {
+    font-size: 11px; color: #22c55e; background: rgba(34,197,94,0.1);
+    border: 1px solid rgba(34,197,94,0.2); border-radius: 6px;
+    padding: 4px 10px; cursor: pointer; text-decoration: none;
+    margin-left: 6px;
+  }
+  .image-card .dl-btn:hover { background: rgba(34,197,94,0.2); }
+  .image-card .open-btn:hover { background: rgba(244,63,94,0.2); }
+  .img-actions { display: flex; gap: 0; align-items: center; }
+  .asset-section-title {
+    font-size: 13px; font-weight: 600; color: #f97316; margin: 16px 0 8px;
+    text-transform: uppercase; letter-spacing: 0.5px;
+  }
+
+  .step-list { counter-reset: steps; }
+  .step-item {
+    counter-increment: steps;
+    padding: 12px 0 12px 40px; position: relative;
+    border-left: 2px solid #1f2937; margin-left: 12px;
+  }
+  .step-item::before {
+    content: counter(steps);
+    position: absolute; left: -13px; top: 12px;
+    width: 24px; height: 24px; border-radius: 50%;
+    background: #f43f5e; color: #fff; font-size: 12px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .step-item h3 { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+  .step-item p { font-size: 13px; color: #9ca3af; }
+
+  .checklist { list-style: none; }
+  .checklist li {
+    padding: 8px 0; font-size: 13px; color: #d1d5db;
+    display: flex; align-items: flex-start; gap: 8px;
+  }
+  .checklist li::before { content: '☐'; color: #6b7280; }
+
+  .divider { height: 1px; background: #1f2937; margin: 32px 0; }
+
+  @media print {
+    body { background: #fff; color: #000; }
+    .header, .tabs { position: static; }
+    .card { border: 1px solid #ccc; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1><span>Opalite</span> CWS Listing Helper</h1>
+  <p>Click any text field to copy it. Drag images directly into the CWS dashboard. Open this side-by-side with the Developer Dashboard.</p>
+</div>
+
+<div class="tabs">
+  <div class="tab active" data-ext="gemini">Gemini Suite</div>
+  <div class="tab" data-ext="grok">Grok Suite</div>
+  <div class="tab" data-ext="chatgpt">ChatGPT & Sora Suite</div>
+  <div class="tab" data-ext="guide">Step-by-Step Guide</div>
+</div>
+
+<div class="content">
+
+<!-- ═══════════ GEMINI SUITE ═══════════ -->
+<div class="ext-section active" id="gemini">
+  <div class="card">
+    <h2>Store Listing — Text Fields</h2>
+    <div class="hint">Click each box to copy, then paste into the CWS dashboard</div>
+
+    <div class="field">
+      <label>Detailed Description</label>
+      <div class="copy-box">Gemini Suite by Opalite — batch-create and save every video and image you make with Google AI.
+
+WHAT IT DOES
+Supercharge your creative workflow on Gemini, Veo, Flow, Whisk, AI Studio, and Google Labs. Batch-send prompts, auto-save results, manage generation tasks, and organize everything in one place — free.
+
+KEY FEATURES
+• Batch Prompt Sending: Queue up multiple prompts and send them automatically. Stop copying and pasting one at a time — let the extension handle it while you focus on creating.
+• Auto-Save: Every video and image saves to your device as it's generated. No more right-clicking or hunting through your browser history.
+• Prompt Templates: Build reusable prompt templates with variables, prefixes, and suffixes. Generate dozens of variations from a single template.
+• Task Queue: Full task management with automatic queuing, adjustable execution order, and the ability to add or remove tasks anytime.
+• Image-to-Video & Image-to-Image: Feed existing images back into AI to create new videos or image variations — supports single or batch input.
+• AI Upscaling: Enhance resolution up to 4× with built-in AI upscaler.
+• Background Removal: Strip backgrounds from images automatically.
+• Watermark Removal: Clean watermarks from AI-generated videos.
+• Cloud Library: Save everything to your Opalite cloud for searchable, organized storage that syncs across all your devices.
+• Easy Sharing: Share videos and images directly from your dashboard.
+
+SUPPORTED PLATFORMS
+Works everywhere Google generates AI media: Gemini (gemini.google.com), AI Studio (aistudio.google.com), Google Labs (labs.google), Veo, Flow, and Whisk.
+
+HOW IT WORKS
+1. Install the extension — start using immediately, no signup needed
+2. Generate on Gemini, Veo, Flow, or Whisk — use batch prompts or create as usual
+3. Videos and images auto-save to your device as they're created
+4. Sign in anytime for cloud storage, AI upscaling, background removal, and sharing
+
+WHY GEMINI SUITE
+Most features are completely free — no trial, no credit card, no catch. Batch prompts, auto-save, templates, and task management all work out of the box with no account. Want cloud storage, AI upscaling, or watermark removal? Sign in to unlock pro tools with your Opalite account.
+
+Your AI creations deserve better than scattered browser tabs and lost generations. Gemini Suite turns Google AI into a full creative studio — batch-create, auto-save, enhance, and organize everything you make.
+
+Visit opalitestudios.com to learn more.</div>
+    </div>
+
+    <div class="field">
+      <label>Category</label>
+      <div class="copy-box">Workflow & Planning</div>
+    </div>
+
+    <div class="field">
+      <label>Localized Promo Video (YouTube URL)</label>
+      <div class="copy-box">https://www.youtube.com/watch?v=bEKAEpsfYjY</div>
+    </div>
+
+    <div class="field">
+      <label>Global Promo Video (YouTube URL)</label>
+      <div class="copy-box">https://www.youtube.com/watch?v=bEKAEpsfYjY</div>
+    </div>
+
+    <div class="field">
+      <label>Homepage URL</label>
+      <div class="copy-box">https://opalitestudios.com</div>
+    </div>
+
+    <div class="field">
+      <label>Support URL</label>
+      <div class="copy-box">https://opalitestudios.com/support</div>
+    </div>
+
+    <div class="field">
+      <label>Mature Content</label>
+      <div class="copy-box">No — this extension does not contain mature content.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Privacy Practices <span class="badge">Required</span></h2>
+    <div class="hint">Fill these into the "Privacy" tab in the CWS dashboard — fields appear in this exact order</div>
+
+    <div class="field">
+      <label>Single Purpose Description</label>
+      <div class="copy-box">Batch-create, auto-save, and organize AI videos and images from Gemini, Veo, Flow, and Whisk — with prompt tools, upscaling, and cloud storage.</div>
+    </div>
+
+    <div class="field">
+      <label>Permission: downloads</label>
+      <div class="copy-box">Required to save AI-generated videos and images from Gemini to the user's device and optionally to the Opalite cloud library.</div>
+    </div>
+    <div class="field">
+      <label>Permission: declarativeNetRequest</label>
+      <div class="copy-box">Required to modify network request headers for proper communication with the Opalite API server and to handle cross-origin media fetching.</div>
+    </div>
+    <div class="field">
+      <label>Permission: storage</label>
+      <div class="copy-box">Required to persist user authentication state, extension preferences, and sync settings between browser sessions.</div>
+    </div>
+    <div class="field">
+      <label>Permission: notifications</label>
+      <div class="copy-box">Required to notify the user when videos and images are successfully saved, when processing (upscaling) is complete, and for important account alerts.</div>
+    </div>
+    <div class="field">
+      <label>Permission: scripting</label>
+      <div class="copy-box">Required to inject content scripts into supported AI platforms to detect and capture AI-generated videos and images from the page.</div>
+    </div>
+    <div class="field">
+      <label>Permission: activeTab</label>
+      <div class="copy-box">Required to interact with the current tab's content when the user activates the extension, enabling video and image detection on supported platforms.</div>
+    </div>
+    <div class="field">
+      <label>Permission: cookies</label>
+      <div class="copy-box">Required to maintain authenticated sessions with the Opalite API server (opalitestudios.com) for secure media upload and account management.</div>
+    </div>
+    <div class="field">
+      <label>Host permission</label>
+      <div class="copy-box">This extension requires host access to gemini.google.com, aistudio.google.com, and labs.google to detect and capture AI-generated videos and images on these Google AI platforms. Host access to opalitestudios.com is required for API communication, user authentication, and media upload to the Opalite cloud service.</div>
+    </div>
+
+    <div class="field">
+      <label>Remote Code</label>
+      <div class="copy-box">No, I am not using remote code.</div>
+    </div>
+
+    <div class="field">
+      <label>Data Usage — Check These Boxes</label>
+      <div class="copy-box">CHECK these data types:
+✓ Personally identifiable information (syncs user name, email, and avatar to Opalite server)
+✓ Authentication information (JWT tokens, refresh tokens, session cookies for Opalite account)
+✓ Web history (syncs current page URL and title on supported sites to identify the AI platform)
+✓ User activity (intercepts download events on supported sites to auto-save generated videos and images)
+✓ Website content (captures AI-generated videos and images and associated prompts from supported platforms)
+
+LEAVE UNCHECKED:
+✗ Health information
+✗ Financial and payment information
+✗ Personal communications
+✗ Location</div>
+    </div>
+
+    <div class="field">
+      <label>Data Usage Certifications — Check All</label>
+      <div class="copy-box">CHECK all certification boxes:
+✓ I certify that data collection and usage complies with the extension's privacy policy
+✓ I certify that data is not sold to third parties
+✓ I certify that data is not used or transferred for purposes unrelated to the item's core functionality
+✓ I certify that data is not used or transferred to determine creditworthiness or for lending purposes</div>
+    </div>
+
+    <div class="field">
+      <label>Privacy Policy URL</label>
+      <div class="copy-box">https://opalitestudios.com/privacy</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Distribution <span class="badge">Required</span></h2>
+    <div class="hint">Fill these into the "Distribution" tab in the CWS dashboard</div>
+
+    <div class="field">
+      <label>Visibility</label>
+      <div class="copy-box">Public</div>
+    </div>
+
+    <div class="field">
+      <label>Geographic Distribution</label>
+      <div class="copy-box">All regions</div>
+    </div>
+
+    <div class="field">
+      <label>Pricing</label>
+      <div class="copy-box">Free</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Graphic Assets — All Media for CWS Upload</h2>
+    <div class="hint">Click "Download" to save each file, then upload to the matching CWS field. Upload order: Store icon → Localized screenshots → Global screenshots (same files) → Small promo tile → Marquee promo tile</div>
+
+    <div class="asset-section-title">Store Icon (128 × 128)</div>
+    <div class="image-grid">
+      <div class="image-card">
+        <img src="store-icon-gemini-128.png" alt="Store Icon" style="max-width:128px;margin:16px auto;display:block;">
+        <div class="img-info">
+          <div>
+            <div class="img-label">Store Icon (Gemini Suite)</div>
+            <div class="img-dims">128 × 128 PNG (no alpha)</div>
+          </div>
+          <div class="img-actions">
+            <a class="open-btn" href="store-icon-gemini-128.png" target="_blank">Open</a>
+            <a class="dl-btn" href="store-icon-gemini-128.png" download="gemini-store-icon-128.png">Download</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="asset-section-title">Localized & Global Screenshots (1280 × 800) — Up to 5 each</div>
+    <div class="image-grid">
+      <div class="image-card">
+        <img src="screenshots/annotated/gemini_default.png" alt="Screenshot 1 — Default Panel">
+        <div class="img-info">
+          <div>
+            <div class="img-label">Screenshot 1 — Default Panel</div>
+            <div class="img-dims">1280 × 800</div>
+          </div>
+          <div class="img-actions">
+            <a class="open-btn" href="screenshots/annotated/gemini_default.png" target="_blank">Open</a>
+            <a class="dl-btn" href="screenshots/annotated/gemini_default.png" download="gemini-screenshot-1-default.png">Download</a>
+          </div>
+        </div>
+      </div>
+      <div class="image-card">
+        <img src="screenshots/annotated/gemini_task_manager.png" alt="Screenshot 2 — Task Manager">
+        <div class="img-info">
+          <div>
+            <div class="img-label">Screenshot 2 — Task Manager</div>
+            <div class="img-dims">1280 × 800</div>
+          </div>
+          <div class="img-actions">
+            <a class="open-btn" href="screenshots/annotated/gemini_task_manager.png" target="_blank">Open</a>
+            <a class="dl-btn" href="screenshots/annotated/gemini_task_manager.png" download="gemini-screenshot-2-task-manager.png">Download</a>
+          </div>
+        </div>
+      </div>
+      <div class="image-card">
+        <img src="screenshots/annotated/gemini_template_edit.png" alt="Screenshot 3 — Template Editor">
+        <div class="img-info">
+          <div>
+            <div class="img-label">Screenshot 3 — Template Editor</div>
+            <div class="img-dims">1280 × 800</div>
+          </div>
+          <div class="img-actions">
+            <a class="open-btn" href="screenshots/annotated/gemini_template_edit.png" target="_blank">Open</a>
+            <a class="dl-btn" href="screenshots/annotated/gemini_template_edit.png" download="gemini-screenshot-3-templates.png">Download</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="asset-section-title">Small Promo Tile (440 × 280)</div>
+    <div class="image-grid">
+      <div class="image-card">
+        <img src="screenshots/banners/gemini_tile_small.png" alt="Small Promo Tile">
+        <div class="img-info">
+          <div>
+            <div class="img-label">Small Promo Tile</div>
+            <div class="img-dims">440 × 280</div>
+          </div>
+          <div class="img-actions">
+            <a class="open-btn" href="screenshots/banners/gemini_tile_small.png" target="_blank">Open</a>
+            <a class="dl-btn" href="screenshots/banners/gemini_tile_small.png" download="gemini-promo-small-440x280.png">Download</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="asset-section-title">Marquee Promo Tile (1400 × 560)</div>
+    <div class="image-grid">
+      <div class="image-card">
+        <img src="screenshots/banners/gemini_tile_marquee.png" alt="Marquee Promo Tile">
+        <div class="img-info">
+          <div>
+            <div class="img-label">Marquee Promo Tile</div>
+            <div class="img-dims">1400 × 560</div>
+          </div>
+          <div class="img-actions">
+            <a class="open-btn" href="screenshots/banners/gemini_tile_marquee.png" target="_blank">Open</a>
+            <a class="dl-btn" href="screenshots/banners/gemini_tile_marquee.png" download="gemini-promo-marquee-1400x560.png">Download</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ GROK SUITE ═══════════ -->
+<div class="ext-section" id="grok">
+  <div class="card">
+    <h2>Store Listing — Text Fields</h2>
+    <div class="hint">Click each box to copy, then paste into the CWS dashboard</div>
+
+    <div class="field">
+      <label>Detailed Description</label>
+      <div class="copy-box">Grok Suite by Opalite — batch-create and save every video and image you make with Grok.
+
+WHAT IT DOES
+Supercharge your creative workflow on Grok. Batch-send prompts, auto-save results, manage generation tasks, and organize everything in one place — free.
+
+KEY FEATURES
+• Batch Prompt Sending: Queue up multiple prompts and send them automatically. Stop copying and pasting one at a time — let the extension handle it while you focus on creating.
+• Auto-Save: Every video and image saves to your device as it's generated. No more right-clicking or hunting through your browser history.
+• Prompt Templates: Build reusable prompt templates with variables, prefixes, and suffixes. Generate dozens of variations from a single template.
+• Task Queue: Full task management with automatic queuing, adjustable execution order, and the ability to add or remove tasks anytime.
+• Image-to-Video & Image-to-Image: Feed existing images back into Grok to create new videos or image variations — supports single or batch input.
+• AI Upscaling: Enhance resolution up to 4× with built-in AI upscaler.
+• Background Removal: Strip backgrounds from images automatically.
+• Watermark Removal: Clean Grok watermarks from saved videos and images.
+• Cloud Library: Save everything to your Opalite cloud for searchable, organized storage that syncs across all your devices.
+• Easy Sharing: Share videos and images directly from your dashboard.
+
+GROK'S STRENGTHS
+Grok is a powerhouse for AI video and image generation — free, fast, and high-volume. Grok Suite lets you take full advantage by automating the entire create-and-save workflow.
+
+HOW IT WORKS
+1. Install the extension — start using immediately, no signup needed
+2. Generate on Grok — use batch prompts or create as usual
+3. Videos and images auto-save to your device as they're created
+4. Sign in anytime for cloud storage, AI upscaling, background removal, and sharing
+
+WHY GROK SUITE
+Most features are completely free — no trial, no credit card, no catch. Batch prompts, auto-save, templates, and task management all work out of the box with no account. Want cloud storage, AI upscaling, or watermark removal? Sign in to unlock pro tools with your Opalite account.
+
+Your AI creations deserve better than scattered browser tabs and lost generations. Grok Suite turns Grok into a full creative studio — batch-create, auto-save, enhance, and organize everything you make.
+
+Visit opalitestudios.com to learn more.</div>
+    </div>
+
+    <div class="field">
+      <label>Category</label>
+      <div class="copy-box">Workflow & Planning</div>
+    </div>
+
+    <div class="field">
+      <label>Localized Promo Video (YouTube URL)</label>
+      <div class="copy-box">https://www.youtube.com/watch?v=K5e62UbhhoE</div>
+    </div>
+
+    <div class="field">
+      <label>Global Promo Video (YouTube URL)</label>
+      <div class="copy-box">https://www.youtube.com/watch?v=K5e62UbhhoE</div>
+    </div>
+
+    <div class="field">
+      <label>Homepage URL</label>
+      <div class="copy-box">https://opalitestudios.com</div>
+    </div>
+
+    <div class="field">
+      <label>Support URL</label>
+      <div class="copy-box">https://opalitestudios.com/support</div>
+    </div>
+
+    <div class="field">
+      <label>Mature Content</label>
+      <div class="copy-box">No — this extension does not contain mature content.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Privacy Practices <span class="badge">Required</span></h2>
+    <div class="hint">Fill these into the "Privacy" tab in the CWS dashboard — fields appear in this exact order</div>
+
+    <div class="field">
+      <label>Single Purpose Description</label>
+      <div class="copy-box">Batch-create, auto-save, and organize AI videos and images from Grok — with prompt tools, upscaling, and cloud storage.</div>
+    </div>
+
+    <div class="field">
+      <label>Permission: downloads</label>
+      <div class="copy-box">Required to save AI-generated videos and images from Grok to the user's device and optionally to the Opalite cloud library.</div>
+    </div>
+    <div class="field">
+      <label>Permission: declarativeNetRequest</label>
+      <div class="copy-box">Required to modify network request headers for proper communication with the Opalite API server and to handle cross-origin media fetching.</div>
+    </div>
+    <div class="field">
+      <label>Permission: storage</label>
+      <div class="copy-box">Required to persist user authentication state, extension preferences, and sync settings between browser sessions.</div>
+    </div>
+    <div class="field">
+      <label>Permission: notifications</label>
+      <div class="copy-box">Required to notify the user when videos and images are successfully saved, when processing (upscaling) is complete, and for important account alerts.</div>
+    </div>
+    <div class="field">
+      <label>Permission: scripting</label>
+      <div class="copy-box">Required to inject content scripts into supported AI platforms to detect and capture AI-generated videos and images from the page.</div>
+    </div>
+    <div class="field">
+      <label>Permission: activeTab</label>
+      <div class="copy-box">Required to interact with the current tab's content when the user activates the extension, enabling video and image detection on supported platforms.</div>
+    </div>
+    <div class="field">
+      <label>Permission: cookies</label>
+      <div class="copy-box">Required to maintain authenticated sessions with the Opalite API server (opalitestudios.com) for secure media upload and account management.</div>
+    </div>
+    <div class="field">
+      <label>Host permission</label>
+      <div class="copy-box">This extension requires host access to grok.com to detect and capture AI-generated videos and images on xAI's Grok platform. Host access to opalitestudios.com is required for API communication, user authentication, and media upload to the Opalite cloud service.</div>
+    </div>
+
+    <div class="field">
+      <label>Remote Code</label>
+      <div class="copy-box">No, I am not using remote code.</div>
+    </div>
+
+    <div class="field">
+      <label>Data Usage — Check These Boxes</label>
+      <div class="copy-box">CHECK these data types:
+✓ Personally identifiable information (syncs user name, email, and avatar to Opalite server)
+✓ Authentication information (JWT tokens, refresh tokens, session cookies for Opalite account)
+✓ Web history (syncs current page URL and title on supported sites to identify the AI platform)
+✓ User activity (intercepts download events on supported sites to auto-save generated videos and images)
+✓ Website content (captures AI-generated videos and images and associated prompts from supported platforms)
+
+LEAVE UNCHECKED:
+✗ Health information
+✗ Financial and payment information
+✗ Personal communications
+✗ Location</div>
+    </div>
+
+    <div class="field">
+      <label>Data Usage Certifications — Check All</label>
+      <div class="copy-box">CHECK all certification boxes:
+✓ I certify that data collection and usage complies with the extension's privacy policy
+✓ I certify that data is not sold to third parties
+✓ I certify that data is not used or transferred for purposes unrelated to the item's core functionality
+✓ I certify that data is not used or transferred to determine creditworthiness or for lending purposes</div>
+    </div>
+
+    <div class="field">
+      <label>Privacy Policy URL</label>
+      <div class="copy-box">https://opalitestudios.com/privacy</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Distribution <span class="badge">Required</span></h2>
+    <div class="hint">Fill these into the "Distribution" tab in the CWS dashboard</div>
+
+    <div class="field">
+      <label>Visibility</label>
+      <div class="copy-box">Public</div>
+    </div>
+
+    <div class="field">
+      <label>Geographic Distribution</label>
+      <div class="copy-box">All regions</div>
+    </div>
+
+    <div class="field">
+      <label>Pricing</label>
+      <div class="copy-box">Free</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Graphic Assets — All Media for CWS Upload</h2>
+    <div class="hint">Click "Download" to save each file, then upload to the matching CWS field. Upload order: Store icon → Localized screenshots → Global screenshots (same files) → Small promo tile → Marquee promo tile</div>
+
+    <div class="asset-section-title">Store Icon (128 × 128)</div>
+    <div class="image-grid">
+      <div class="image-card">
+        <img src="store-icon-grok-128.png" alt="Store Icon" style="max-width:128px;margin:16px auto;display:block;">
+        <div class="img-info">
+          <div>
+            <div class="img-label">Store Icon (Grok Suite)</div>
+            <div class="img-dims">128 × 128 PNG (no alpha)</div>
+          </div>
+          <div class="img-actions">
+            <a class="open-btn" href="store-icon-grok-128.png" target="_blank">Open</a>
+            <a class="dl-btn" href="store-icon-grok-128.png" download="grok-store-icon-128.png">Download</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="asset-section-title">Localized & Global Screenshots (1280 × 800) — Up to 5 each</div>
+    <div class="image-grid">
+      <div class="image-card">
+        <img src="screenshots/annotated/grok_default.png" alt="Screenshot 1 — Default Panel">
+        <div class="img-info">
+          <div>
+            <div class="img-label">Screenshot 1 — Default Panel</div>
+            <div class="img-dims">1280 × 800</div>
+          </div>
+          <div class="img-actions">
+            <a class="open-btn" href="screenshots/annotated/grok_default.png" target="_blank">Open</a>
+            <a class="dl-btn" href="screenshots/annotated/grok_default.png" download="grok-screenshot-1-default.png">Download</a>
+          </div>
+        </div>
+      </div>
+      <div class="image-card">
+        <img src="screenshots/annotated/grok_task_manager.png" alt="Screenshot 2 — Task Manager">
+        <div class="img-info">
+          <div>
+            <div class="img-label">Screenshot 2 — Task Manager</div>
+            <div class="img-dims">1280 × 800</div>
+          </div>
+          <div class="img-actions">
+            <a class="open-btn" href="screenshots/annotated/grok_task_manager.png" target="_blank">Open</a>
+            <a class="dl-btn" href="screenshots/annotated/grok_task_manager.png" download="grok-screenshot-2-task-manager.png">Download</a>
+          </div>
+        </div>
+      </div>
+      <div class="image-card">
+        <img src="screenshots/annotated/grok_template_use.png" alt="Screenshot 3 — Template Fill-in">
+        <div class="img-info">
+          <div>
+            <div class="img-label">Screenshot 3 — Template Fill-in</div>
+            <div class="img-dims">1280 × 800</div>
+          </div>
+          <div class="img-actions">
+            <a class="open-btn" href="screenshots/annotated/grok_template_use.png" target="_blank">Open</a>
+            <a class="dl-btn" href="screenshots/annotated/grok_template_use.png" download="grok-screenshot-3-templates.png">Download</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="asset-section-title">Small Promo Tile (440 × 280)</div>
+    <div class="image-grid">
+      <div class="image-card">
+        <img src="screenshots/banners/grok_tile_small.png" alt="Small Promo Tile">
+        <div class="img-info">
+          <div>
+            <div class="img-label">Small Promo Tile</div>
+            <div class="img-dims">440 × 280</div>
+          </div>
+          <div class="img-actions">
+            <a class="open-btn" href="screenshots/banners/grok_tile_small.png" target="_blank">Open</a>
+            <a class="dl-btn" href="screenshots/banners/grok_tile_small.png" download="grok-promo-small-440x280.png">Download</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="asset-section-title">Marquee Promo Tile (1400 × 560)</div>
+    <div class="image-grid">
+      <div class="image-card">
+        <img src="screenshots/banners/grok_tile_marquee.png" alt="Marquee Promo Tile">
+        <div class="img-info">
+          <div>
+            <div class="img-label">Marquee Promo Tile</div>
+            <div class="img-dims">1400 × 560</div>
+          </div>
+          <div class="img-actions">
+            <a class="open-btn" href="screenshots/banners/grok_tile_marquee.png" target="_blank">Open</a>
+            <a class="dl-btn" href="screenshots/banners/grok_tile_marquee.png" download="grok-promo-marquee-1400x560.png">Download</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ CHATGPT SUITE ═══════════ -->
+<div class="ext-section" id="chatgpt">
+  <div class="card">
+    <h2>Store Listing — Text Fields</h2>
+    <div class="hint">Click each box to copy, then paste into the CWS dashboard</div>
+
+    <div class="field">
+      <label>Detailed Description</label>
+      <div class="copy-box">ChatGPT & Sora Suite by Opalite — batch-create and save every video and image you make with ChatGPT, DALL-E, and Sora.
+
+WHAT IT DOES
+Supercharge your creative workflow on ChatGPT, DALL-E, and Sora. Batch-send prompts, auto-save results, manage generation tasks, and organize everything in one place — free.
+
+KEY FEATURES
+• Batch Prompt Sending: Queue up multiple prompts and send them automatically. Stop copying and pasting one at a time — let the extension handle it while you focus on creating.
+• Auto-Save: Every video and image saves to your device as it's generated. No more right-clicking or hunting through your browser history.
+• Prompt Templates: Build reusable prompt templates with variables, prefixes, and suffixes. Generate dozens of variations from a single template.
+• Task Queue: Full task management with automatic queuing, adjustable execution order, and the ability to add or remove tasks anytime.
+• Image-to-Video & Image-to-Image: Feed existing images back into AI to create new videos or image variations — supports single or batch input.
+• AI Upscaling: Enhance resolution up to 4× with built-in AI upscaler.
+• Background Removal: Strip backgrounds from images automatically.
+• Sora Watermark Removal: Clean watermarks from Sora-generated videos.
+• Cloud Library: Save everything to your Opalite cloud for searchable, organized storage that syncs across all your devices.
+• Easy Sharing: Share videos and images directly from your dashboard.
+
+SUPPORTED PLATFORMS
+Works with ChatGPT (chatgpt.com) for DALL-E image generation and Sora (sora.chatgpt.com) for video creation.
+
+HOW IT WORKS
+1. Install the extension — start using immediately, no signup needed
+2. Generate on ChatGPT or Sora — use batch prompts or create as usual
+3. Videos and images auto-save to your device as they're created
+4. Sign in anytime for cloud storage, AI upscaling, background removal, and sharing
+
+WHY CHATGPT & SORA SUITE
+Most features are completely free — no trial, no credit card, no catch. Batch prompts, auto-save, templates, and task management all work out of the box with no account. Want cloud storage, AI upscaling, or watermark removal? Sign in to unlock pro tools with your Opalite account.
+
+Your AI creations deserve better than scattered browser tabs and lost generations. ChatGPT & Sora Suite turns ChatGPT into a full creative studio — batch-create, auto-save, enhance, and organize everything you make.
+
+Visit opalitestudios.com to learn more.</div>
+    </div>
+
+    <div class="field">
+      <label>Category</label>
+      <div class="copy-box">Workflow & Planning</div>
+    </div>
+
+    <div class="field">
+      <label>Localized Promo Video (YouTube URL)</label>
+      <div class="copy-box">https://www.youtube.com/watch?v=WbB-tbaW5ns</div>
+    </div>
+
+    <div class="field">
+      <label>Global Promo Video (YouTube URL)</label>
+      <div class="copy-box">https://www.youtube.com/watch?v=WbB-tbaW5ns</div>
+    </div>
+
+    <div class="field">
+      <label>Homepage URL</label>
+      <div class="copy-box">https://opalitestudios.com</div>
+    </div>
+
+    <div class="field">
+      <label>Support URL</label>
+      <div class="copy-box">https://opalitestudios.com/support</div>
+    </div>
+
+    <div class="field">
+      <label>Mature Content</label>
+      <div class="copy-box">No — this extension does not contain mature content.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Privacy Practices <span class="badge">Required</span></h2>
+    <div class="hint">Fill these into the "Privacy" tab in the CWS dashboard — fields appear in this exact order</div>
+
+    <div class="field">
+      <label>Single Purpose Description</label>
+      <div class="copy-box">Batch-create, auto-save, and organize AI videos and images from ChatGPT, DALL-E, and Sora — with prompt tools, upscaling, and cloud storage.</div>
+    </div>
+
+    <div class="field">
+      <label>Permission: downloads</label>
+      <div class="copy-box">Required to save AI-generated videos and images from ChatGPT and Sora to the user's device and optionally to the Opalite cloud library.</div>
+    </div>
+    <div class="field">
+      <label>Permission: declarativeNetRequest</label>
+      <div class="copy-box">Required to modify network request headers for proper communication with the Opalite API server and to handle cross-origin media fetching.</div>
+    </div>
+    <div class="field">
+      <label>Permission: storage</label>
+      <div class="copy-box">Required to persist user authentication state, extension preferences, and sync settings between browser sessions.</div>
+    </div>
+    <div class="field">
+      <label>Permission: notifications</label>
+      <div class="copy-box">Required to notify the user when videos and images are successfully saved, when processing (upscaling) is complete, and for important account alerts.</div>
+    </div>
+    <div class="field">
+      <label>Permission: scripting</label>
+      <div class="copy-box">Required to inject content scripts into supported AI platforms to detect and capture AI-generated videos and images from the page.</div>
+    </div>
+    <div class="field">
+      <label>Permission: activeTab</label>
+      <div class="copy-box">Required to interact with the current tab's content when the user activates the extension, enabling video and image detection on supported platforms.</div>
+    </div>
+    <div class="field">
+      <label>Permission: cookies</label>
+      <div class="copy-box">Required to maintain authenticated sessions with the Opalite API server (opalitestudios.com) for secure media upload and account management.</div>
+    </div>
+    <div class="field">
+      <label>Host permission</label>
+      <div class="copy-box">This extension requires host access to chatgpt.com to detect and capture AI-generated videos and images from ChatGPT and DALL-E, and to sora.chatgpt.com for Sora video detection. Host access to opalitestudios.com is required for API communication, user authentication, and media upload to the Opalite cloud service.</div>
+    </div>
+
+    <div class="field">
+      <label>Remote Code</label>
+      <div class="copy-box">No, I am not using remote code.</div>
+    </div>
+
+    <div class="field">
+      <label>Data Usage — Check These Boxes</label>
+      <div class="copy-box">CHECK these data types:
+✓ Personally identifiable information (syncs user name, email, and avatar to Opalite server)
+✓ Authentication information (JWT tokens, refresh tokens, session cookies for Opalite account)
+✓ Web history (syncs current page URL and title on supported sites to identify the AI platform)
+✓ User activity (intercepts download events on supported sites to auto-save generated videos and images)
+✓ Website content (captures AI-generated videos and images and associated prompts from supported platforms)
+
+LEAVE UNCHECKED:
+✗ Health information
+✗ Financial and payment information
+✗ Personal communications
+✗ Location</div>
+    </div>
+
+    <div class="field">
+      <label>Data Usage Certifications — Check All</label>
+      <div class="copy-box">CHECK all certification boxes:
+✓ I certify that data collection and usage complies with the extension's privacy policy
+✓ I certify that data is not sold to third parties
+✓ I certify that data is not used or transferred for purposes unrelated to the item's core functionality
+✓ I certify that data is not used or transferred to determine creditworthiness or for lending purposes</div>
+    </div>
+
+    <div class="field">
+      <label>Privacy Policy URL</label>
+      <div class="copy-box">https://opalitestudios.com/privacy</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Distribution <span class="badge">Required</span></h2>
+    <div class="hint">Fill these into the "Distribution" tab in the CWS dashboard</div>
+
+    <div class="field">
+      <label>Visibility</label>
+      <div class="copy-box">Public</div>
+    </div>
+
+    <div class="field">
+      <label>Geographic Distribution</label>
+      <div class="copy-box">All regions</div>
+    </div>
+
+    <div class="field">
+      <label>Pricing</label>
+      <div class="copy-box">Free</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Graphic Assets — All Media for CWS Upload</h2>
+    <div class="hint">Click "Download" to save each file, then upload to the matching CWS field. Upload order: Store icon → Localized screenshots → Global screenshots (same files) → Small promo tile → Marquee promo tile</div>
+
+    <div class="asset-section-title">Store Icon (128 × 128)</div>
+    <div class="image-grid">
+      <div class="image-card">
+        <img src="store-icon-chatgpt-128.png" alt="Store Icon" style="max-width:128px;margin:16px auto;display:block;">
+        <div class="img-info">
+          <div>
+            <div class="img-label">Store Icon (ChatGPT Suite)</div>
+            <div class="img-dims">128 × 128 PNG (no alpha)</div>
+          </div>
+          <div class="img-actions">
+            <a class="open-btn" href="store-icon-chatgpt-128.png" target="_blank">Open</a>
+            <a class="dl-btn" href="store-icon-chatgpt-128.png" download="chatgpt-store-icon-128.png">Download</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="asset-section-title">Localized & Global Screenshots (1280 × 800) — Up to 5 each</div>
+    <div class="image-grid">
+      <div class="image-card">
+        <img src="screenshots/annotated/chatgpt_default.png" alt="Screenshot 1 — Default Panel">
+        <div class="img-info">
+          <div>
+            <div class="img-label">Screenshot 1 — Default Panel</div>
+            <div class="img-dims">1280 × 800</div>
+          </div>
+          <div class="img-actions">
+            <a class="open-btn" href="screenshots/annotated/chatgpt_default.png" target="_blank">Open</a>
+            <a class="dl-btn" href="screenshots/annotated/chatgpt_default.png" download="chatgpt-screenshot-1-default.png">Download</a>
+          </div>
+        </div>
+      </div>
+      <div class="image-card">
+        <img src="screenshots/annotated/chatgpt_task_manager.png" alt="Screenshot 2 — Task Manager">
+        <div class="img-info">
+          <div>
+            <div class="img-label">Screenshot 2 — Task Manager</div>
+            <div class="img-dims">1280 × 800</div>
+          </div>
+          <div class="img-actions">
+            <a class="open-btn" href="screenshots/annotated/chatgpt_task_manager.png" target="_blank">Open</a>
+            <a class="dl-btn" href="screenshots/annotated/chatgpt_task_manager.png" download="chatgpt-screenshot-2-task-manager.png">Download</a>
+          </div>
+        </div>
+      </div>
+      <div class="image-card">
+        <img src="screenshots/annotated/chatgpt_template_use.png" alt="Screenshot 3 — Template Fill-in">
+        <div class="img-info">
+          <div>
+            <div class="img-label">Screenshot 3 — Template Fill-in</div>
+            <div class="img-dims">1280 × 800</div>
+          </div>
+          <div class="img-actions">
+            <a class="open-btn" href="screenshots/annotated/chatgpt_template_use.png" target="_blank">Open</a>
+            <a class="dl-btn" href="screenshots/annotated/chatgpt_template_use.png" download="chatgpt-screenshot-3-templates.png">Download</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="asset-section-title">Small Promo Tile (440 × 280)</div>
+    <div class="image-grid">
+      <div class="image-card">
+        <img src="screenshots/banners/chatgpt_tile_small.png" alt="Small Promo Tile">
+        <div class="img-info">
+          <div>
+            <div class="img-label">Small Promo Tile</div>
+            <div class="img-dims">440 × 280</div>
+          </div>
+          <div class="img-actions">
+            <a class="open-btn" href="screenshots/banners/chatgpt_tile_small.png" target="_blank">Open</a>
+            <a class="dl-btn" href="screenshots/banners/chatgpt_tile_small.png" download="chatgpt-promo-small-440x280.png">Download</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="asset-section-title">Marquee Promo Tile (1400 × 560)</div>
+    <div class="image-grid">
+      <div class="image-card">
+        <img src="screenshots/banners/chatgpt_tile_marquee.png" alt="Marquee Promo Tile">
+        <div class="img-info">
+          <div>
+            <div class="img-label">Marquee Promo Tile</div>
+            <div class="img-dims">1400 × 560</div>
+          </div>
+          <div class="img-actions">
+            <a class="open-btn" href="screenshots/banners/chatgpt_tile_marquee.png" target="_blank">Open</a>
+            <a class="dl-btn" href="screenshots/banners/chatgpt_tile_marquee.png" download="chatgpt-promo-marquee-1400x560.png">Download</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ GUIDE ═══════════ -->
+<div class="ext-section" id="guide">
+  <div class="card">
+    <h2>Step-by-Step: Fill Out CWS Listing</h2>
+    <div class="hint">Follow these steps for each extension (Gemini Suite, Grok Suite, ChatGPT Suite)</div>
+
+    <div class="step-list">
+      <div class="step-item">
+        <h3>Open the Extension Draft</h3>
+        <p>In the Developer Dashboard, click on the extension name (e.g., "Gemini Suite")</p>
+      </div>
+      <div class="step-item">
+        <h3>Upload the Package (zip)</h3>
+        <p>Go to the "Package" tab → Click "Upload new package" → Select the zip file:<br>
+        <code style="color:#f43f5e">extensions/GeminiExt-opalite.zip</code>, <code style="color:#f43f5e">extensions/GrokExt-opalite.zip</code>, or <code style="color:#f43f5e">extensions/ChatGPTExt-opalite.zip</code></p>
+      </div>
+      <div class="step-item">
+        <h3>Fill in Store Listing</h3>
+        <p>Go to the "Store listing" tab and fill in (in this order):<br>
+        — Detailed Description (copy from this helper page)<br>
+        — Set Category to Workflow &amp; Planning<br>
+        — Upload Store Icon (128×128)<br>
+        — Add Promo Video YouTube URL (if available)<br>
+        — Upload Screenshots (1280×800, up to 5)<br>
+        — Upload Small Promo Tile (440×280)<br>
+        — Upload Marquee Promo Tile (1400×560, if available)<br>
+        — Set Homepage URL and Support URL<br>
+        — Mature Content → No<br>
+        → Click "Save draft"</p>
+      </div>
+      <div class="step-item">
+        <h3>Fill in Privacy</h3>
+        <p>Go to the "Privacy" tab and fill in (in this order):<br>
+        — Single purpose description: paste from this helper page<br>
+        — Permission justifications: paste each one (downloads, declarativeNetRequest, storage, notifications, scripting, activeTab, cookies, Host permission)<br>
+        — Remote code: select "No, I am not using remote code"<br>
+        — Data usage: check the 5 boxes listed in this helper (PII, Auth, Web history, User activity, Website content)<br>
+        — Data usage certifications: check all 3 certification boxes<br>
+        — Privacy policy URL: https://opalitestudios.com/privacy<br>
+        → Click "Save draft"</p>
+      </div>
+      <div class="step-item">
+        <h3>Fill in Distribution</h3>
+        <p>Go to the "Distribution" tab:<br>
+        — Visibility: Public<br>
+        — Geographic distribution: All regions<br>
+        — Pricing: Free (no in-app purchases)<br>
+        → Click "Save draft"</p>
+      </div>
+      <div class="step-item">
+        <h3>Review & Submit</h3>
+        <p>Check all tabs show green checkmarks. Once all 3 tabs are green, click "Submit for review".</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>File Locations</h2>
+    <div class="hint">All files are in the extensions/ directory</div>
+    <ul class="checklist">
+      <li>Zip files: <code>extensions/GeminiExt-opalite.zip</code>, <code>extensions/GrokExt-opalite.zip</code>, <code>extensions/ChatGPTExt-opalite.zip</code></li>
+      <li>Gemini images: <code>extensions/store-assets/gemini/</code></li>
+      <li>Grok images: <code>extensions/store-assets/grok/</code></li>
+      <li>ChatGPT images: <code>extensions/store-assets/chatgpt/</code></li>
+      <li>Store icons: <code>extensions/[ExtName]-opalite production 1.0/images/icon-128.png</code></li>
+      <li>Listing copy: <code>extensions/store-assets/listing-copy.md</code></li>
+    </ul>
+  </div>
+</div>
+
+</div>
+
+<script>
+// Tab switching
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.ext-section').forEach(s => s.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById(tab.dataset.ext).classList.add('active');
+  });
+});
+
+// Click to copy
+document.querySelectorAll('.copy-box').forEach(box => {
+  box.addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText(box.textContent.trim());
+      box.classList.add('copied');
+      setTimeout(() => box.classList.remove('copied'), 2000);
+    } catch (e) {
+      // Fallback for file:// protocol
+      const range = document.createRange();
+      range.selectNodeContents(box);
+      const sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(range);
+      document.execCommand('copy');
+      box.classList.add('copied');
+      setTimeout(() => box.classList.remove('copied'), 2000);
+    }
+  });
+});
+</script>
+</body>
+</html>
