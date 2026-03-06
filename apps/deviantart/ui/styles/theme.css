@@ -1,0 +1,86 @@
+/**
+ * DA Stash Helper — CSS Custom Properties (Theme)
+ *
+ * Dark theme matched to DeviantArt's actual design system.
+ * Colors extracted from DA's live DOM (March 2026).
+ * All components reference these variables for consistency.
+ */
+
+:host, :root {
+  /* Backgrounds */
+  --dsh-bg-primary: #060713;
+  --dsh-bg-secondary: #161a1f;
+  --dsh-bg-tertiary: #21272b;
+  --dsh-bg-input: #21272b;
+
+  /* Borders */
+  --dsh-border: #363a42;
+  --dsh-border-hover: #4a4f57;
+
+  /* Text */
+  --dsh-text-primary: #f2f2f2;
+  --dsh-text-secondary: #838592;
+  --dsh-text-tertiary: #c9cacf;
+  --dsh-text-muted: #c9cacf;
+
+  /* Accent colors — DA green */
+  --dsh-accent: #00e59b;
+  --dsh-accent-hover: #33eaaf;
+  --dsh-green-secondary: #76c291;
+  --dsh-success: #76c291;
+  --dsh-warning: #ffa726;
+  --dsh-error: #f53948;
+  --dsh-info: #4fc3f7;
+
+  /* Shadows */
+  --dsh-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+
+  /* Spacing */
+  --dsh-space-xs: 4px;
+  --dsh-space-sm: 8px;
+  --dsh-space-md: 12px;
+  --dsh-space-lg: 16px;
+  --dsh-space-xl: 24px;
+
+  /* Typography — DA's font stack */
+  --dsh-font-family: "devioussans02regular", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --dsh-font-mono: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+  --dsh-font-size-sm: 11px;
+  --dsh-font-size-base: 13px;
+  --dsh-font-size-lg: 15px;
+  --dsh-font-size-xl: 18px;
+
+  /* Border radii — DA uses tighter corners */
+  --dsh-radius-sm: 2px;
+  --dsh-radius-md: 4px;
+  --dsh-radius-lg: 4px;
+
+  /* Transitions */
+  --dsh-transition: 0.2s ease;
+}
+
+/* ── Light Theme Override ── */
+
+:host([data-theme="light"]) {
+  --dsh-bg-primary: #ffffff;
+  --dsh-bg-secondary: #f4f4f6;
+  --dsh-bg-tertiary: #e8e8ec;
+  --dsh-bg-input: #ffffff;
+
+  --dsh-border: #d4d4d8;
+  --dsh-border-hover: #a1a1aa;
+
+  --dsh-text-primary: #18181b;
+  --dsh-text-secondary: #71717a;
+  --dsh-text-tertiary: #52525b;
+  --dsh-text-muted: #52525b;
+
+  --dsh-accent: #00a97a;
+  --dsh-accent-hover: #009e6f;
+  --dsh-green-secondary: #4d9e6e;
+  --dsh-success: #4d9e6e;
+  --dsh-error: #dc2626;
+  --dsh-info: #2563eb;
+
+  --dsh-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}

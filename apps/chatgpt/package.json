@@ -1,0 +1,20 @@
+{
+  "name": "@opalite/chatgpt-extension",
+  "version": "1.2.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wxt",
+    "build": "wxt build",
+    "zip": "wxt zip",
+    "submit": "wxt submit",
+    "postinstall": "wxt prepare"
+  },
+  "dependencies": {
+    "@opalite/shared": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.0",
+    "wxt": "^0.19.0"
+  }
+}

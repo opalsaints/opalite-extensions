@@ -3,14 +3,27 @@
   "private": true,
   "description": "Chrome extensions for Opalite — AI image suite for Grok, ChatGPT, Gemini & DeviantArt",
   "scripts": {
-    "build": "./extensions/release.sh --build-only",
-    "release": "./extensions/release.sh",
-    "release:patch": "./extensions/release.sh --patch",
-    "release:minor": "./extensions/release.sh --minor",
-    "release:major": "./extensions/release.sh --major",
-    "release:dry": "./extensions/release.sh --dry-run",
-    "ui:build": "pnpm --filter @opalite/extension-ui build",
-    "ui:watch": "pnpm --filter @opalite/extension-ui build:watch"
+    "dev:chatgpt": "pnpm --filter @opalite/chatgpt-extension dev",
+    "dev:gemini": "pnpm --filter @opalite/gemini-extension dev",
+    "dev:grok": "pnpm --filter @opalite/grok-extension dev",
+    "dev:deviantart": "pnpm --filter @opalite/deviantart-extension dev",
+    "build": "pnpm -r --filter './apps/*' build",
+    "build:chatgpt": "pnpm --filter @opalite/chatgpt-extension build",
+    "build:gemini": "pnpm --filter @opalite/gemini-extension build",
+    "build:grok": "pnpm --filter @opalite/grok-extension build",
+    "build:deviantart": "pnpm --filter @opalite/deviantart-extension build",
+    "zip": "pnpm -r --filter './apps/*' zip",
+    "zip:chatgpt": "pnpm --filter @opalite/chatgpt-extension zip",
+    "zip:gemini": "pnpm --filter @opalite/gemini-extension zip",
+    "zip:grok": "pnpm --filter @opalite/grok-extension zip",
+    "zip:deviantart": "pnpm --filter @opalite/deviantart-extension zip",
+    "reload-server": "node scripts/reload-server.mjs",
+    "reload": "node scripts/dev-build.mjs --reload-only",
+    "dev-build": "node scripts/dev-build.mjs",
+    "dev-build:gemini": "node scripts/dev-build.mjs gemini",
+    "dev-build:chatgpt": "node scripts/dev-build.mjs chatgpt",
+    "dev-build:grok": "node scripts/dev-build.mjs grok",
+    "dev-build:all": "node scripts/dev-build.mjs all"
   },
   "engines": {
     "node": ">=20.0.0",
@@ -20,5 +33,8 @@
     "onlyBuiltDependencies": [
       "esbuild"
     ]
+  },
+  "devDependencies": {
+    "ws": "^8.19.0"
   }
 }

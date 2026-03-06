@@ -1,0 +1,15 @@
+{
+  "name": "@opalite/shared",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./*": "./src/*.ts",
+    "./popup.css": "./src/popup.css"
+  },
+  "files": ["src"],
+  "devDependencies": {
+    "typescript": "^5.7.0"
+  }
+}

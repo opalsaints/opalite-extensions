@@ -1,0 +1,462 @@
+/**
+ * Component styles for DA Stash Helper UI.
+ */
+
+/* ── Header ── */
+
+.dsh-header {
+  padding: var(--dsh-space-md) var(--dsh-space-lg);
+  background: var(--dsh-bg-secondary);
+  border-bottom: 1px solid var(--dsh-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.dsh-header h2 {
+  font-size: var(--dsh-font-size-lg);
+  font-weight: 600;
+  color: var(--dsh-text-primary);
+}
+
+/* ── Tab Host ── */
+
+.dsh-tab-bar {
+  display: flex;
+  background: var(--dsh-bg-secondary);
+  border-bottom: 2px solid var(--dsh-border);
+  overflow-x: auto;
+}
+
+.dsh-tab-button {
+  padding: var(--dsh-space-sm) var(--dsh-space-md);
+  background: transparent;
+  color: var(--dsh-text-secondary);
+  font-size: var(--dsh-font-size-sm);
+  font-weight: 500;
+  border: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  white-space: nowrap;
+  transition: color var(--dsh-transition), border-color var(--dsh-transition);
+}
+
+.dsh-tab-button:hover {
+  color: var(--dsh-text-primary);
+}
+
+.dsh-tab-button.active {
+  color: var(--dsh-accent);
+  border-bottom-color: var(--dsh-accent);
+}
+
+.dsh-tab-content {
+  padding: var(--dsh-space-md);
+}
+
+/* ── Item Counter ── */
+
+.dsh-item-counter {
+  padding: var(--dsh-space-sm) var(--dsh-space-lg);
+  background: var(--dsh-bg-secondary);
+  border-bottom: 1px solid var(--dsh-border);
+  font-size: var(--dsh-font-size-sm);
+  display: flex;
+  align-items: center;
+  gap: var(--dsh-space-xs);
+}
+
+/* ── Form Controls ── */
+
+.dsh-form-group {
+  margin-bottom: var(--dsh-space-md);
+}
+
+.dsh-form-group label {
+  display: block;
+  font-size: var(--dsh-font-size-sm);
+  color: var(--dsh-text-secondary);
+  margin-bottom: var(--dsh-space-xs);
+}
+
+.dsh-input {
+  width: 100%;
+  padding: 6px 8px;
+  background: var(--dsh-bg-input);
+  color: var(--dsh-text-primary);
+  border: 1px solid var(--dsh-border);
+  border-radius: var(--dsh-radius-sm);
+  font-size: var(--dsh-font-size-base);
+  transition: border-color var(--dsh-transition);
+}
+
+.dsh-input:focus {
+  border-color: var(--dsh-accent);
+  outline: none;
+}
+
+.dsh-select {
+  width: 100%;
+  padding: 6px 8px;
+  background: var(--dsh-bg-input);
+  color: var(--dsh-text-primary);
+  border: 1px solid var(--dsh-border);
+  border-radius: var(--dsh-radius-sm);
+  font-size: var(--dsh-font-size-base);
+  cursor: pointer;
+}
+
+/* ── Buttons ── */
+
+.dsh-btn {
+  padding: 6px 14px;
+  border-radius: var(--dsh-radius-sm);
+  font-size: var(--dsh-font-size-base);
+  font-weight: 500;
+  cursor: pointer;
+  transition: background var(--dsh-transition), opacity var(--dsh-transition);
+}
+
+.dsh-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.dsh-btn-primary {
+  background: var(--dsh-accent);
+  color: #000;
+  border: none;
+}
+
+.dsh-btn-primary:hover:not(:disabled) {
+  background: var(--dsh-accent-hover);
+}
+
+.dsh-btn-secondary {
+  background: var(--dsh-bg-tertiary);
+  color: var(--dsh-text-primary);
+  border: 1px solid var(--dsh-border);
+}
+
+.dsh-btn-secondary:hover:not(:disabled) {
+  border-color: var(--dsh-border-hover);
+}
+
+.dsh-btn-danger {
+  background: rgba(245, 57, 72, 0.1);
+  color: var(--dsh-error);
+  border: 1px solid var(--dsh-error);
+}
+
+.dsh-btn-danger:hover:not(:disabled) {
+  background: rgba(245, 57, 72, 0.2);
+}
+
+/* ── Progress ── */
+
+.dsh-progress-bar {
+  width: 100%;
+  height: 6px;
+  background: var(--dsh-border);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.dsh-progress-fill {
+  height: 100%;
+  background: var(--dsh-accent);
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
+/* ── Log List ── */
+
+.dsh-log-list {
+  font-family: var(--dsh-font-mono);
+  font-size: var(--dsh-font-size-sm);
+  line-height: 1.5;
+}
+
+.dsh-log-entry {
+  padding: 2px 0;
+  border-bottom: 1px solid var(--dsh-border);
+  word-break: break-word;
+}
+
+/* ── Dropdown ── */
+
+.dsh-dropdown {
+  margin-bottom: var(--dsh-space-sm);
+}
+
+/* ── Status Badge ── */
+
+.dsh-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.dsh-badge-idle { background: var(--dsh-border); color: var(--dsh-text-secondary); }
+.dsh-badge-running { background: rgba(0, 229, 155, 0.15); color: var(--dsh-accent); }
+.dsh-badge-paused { background: rgba(255, 167, 38, 0.15); color: var(--dsh-warning); }
+.dsh-badge-error { background: rgba(245, 57, 72, 0.15); color: var(--dsh-error); }
+.dsh-badge-completed { background: rgba(118, 194, 145, 0.15); color: var(--dsh-success); }
+
+/* ── Onboarding Tour ── */
+
+.dsh-tour-backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+
+.dsh-tour-tooltip {
+  position: absolute;
+  z-index: 1001;
+  background: var(--dsh-bg-secondary);
+  border: 1px solid var(--dsh-accent);
+  border-radius: var(--dsh-radius-md);
+  padding: 12px 14px;
+  max-width: 260px;
+  box-shadow: var(--dsh-shadow);
+}
+
+.dsh-tour-tooltip::before {
+  content: '';
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: var(--dsh-bg-secondary);
+  border-left: 1px solid var(--dsh-accent);
+  border-top: 1px solid var(--dsh-accent);
+  transform: rotate(45deg);
+  top: -5px;
+  left: 20px;
+}
+
+.dsh-tour-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--dsh-text-primary);
+  margin-bottom: 4px;
+}
+
+.dsh-tour-text {
+  font-size: 11px;
+  color: var(--dsh-text-secondary);
+  line-height: 1.5;
+  margin-bottom: 10px;
+}
+
+.dsh-tour-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.dsh-tour-progress {
+  font-size: 10px;
+  color: var(--dsh-text-secondary);
+}
+
+.dsh-tour-actions {
+  display: flex;
+  gap: 6px;
+}
+
+/* ── Scope Selector (radio-style vertical list) ── */
+
+.dsh-scope-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  background: var(--dsh-bg-tertiary);
+  border-radius: var(--dsh-radius-md);
+  padding: 3px;
+}
+
+.dsh-scope-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: var(--dsh-radius-sm);
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  text-align: left;
+  width: 100%;
+  font-family: inherit;
+  color: var(--dsh-text-secondary);
+  transition: all var(--dsh-transition);
+}
+
+.dsh-scope-option:hover {
+  background: var(--dsh-bg-hover);
+  color: var(--dsh-text-primary);
+}
+
+.dsh-scope-option.active {
+  background: var(--dsh-bg-secondary);
+  color: var(--dsh-text-primary);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+}
+
+.dsh-scope-radio {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid var(--dsh-border);
+  flex-shrink: 0;
+  position: relative;
+  transition: border-color var(--dsh-transition);
+}
+
+.dsh-scope-option.active .dsh-scope-radio {
+  border-color: var(--dsh-accent);
+}
+
+.dsh-scope-option.active .dsh-scope-radio::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--dsh-accent);
+}
+
+.dsh-scope-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.dsh-scope-label {
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+.dsh-scope-desc {
+  font-size: 10px;
+  color: var(--dsh-text-secondary);
+  line-height: 1.3;
+  margin-top: 1px;
+}
+
+.dsh-scope-option.active .dsh-scope-desc {
+  color: var(--dsh-text-tertiary);
+}
+
+/* ── Folder Tree Diagram (horizontal, auto-scaled) ── */
+
+/* Outer clip wrapper */
+.dsh-tree-wrap {
+  overflow: hidden;
+  padding: 4px 0 8px;
+  position: relative;
+}
+
+/* Inner container — renders at natural size, gets scaled via JS */
+.dsh-tree-inner {
+  display: inline-flex;
+  justify-content: center;
+  width: 100%;
+}
+
+/* Column: node box centred above its children */
+.dsh-tree-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Node card */
+.dsh-tree-node {
+  padding: 5px 8px;
+  border-radius: 6px;
+  background: var(--dsh-bg-secondary);
+  border: 1px solid var(--dsh-border);
+  text-align: center;
+  white-space: nowrap;
+}
+
+.dsh-tree-node.has-items {
+  border-color: var(--dsh-accent);
+  border-width: 1.5px;
+  background: rgba(0, 229, 155, 0.06);
+}
+
+.dsh-tree-node-name {
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--dsh-text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 80px;
+}
+
+.dsh-tree-node-count {
+  font-size: 9px;
+  font-family: monospace;
+  margin-top: 1px;
+}
+
+/* Vertical line from parent down to children row */
+.dsh-tree-vline {
+  width: 1.5px;
+  height: 12px;
+  background: var(--dsh-accent);
+  opacity: 0.4;
+  flex-shrink: 0;
+}
+
+/* Row of children */
+.dsh-tree-children {
+  display: flex;
+}
+
+/* Wrapper for each child — draws horizontal connector via ::before */
+.dsh-tree-child {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 4px;
+  position: relative;
+}
+
+/* Horizontal line segment across each child */
+.dsh-tree-child::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  border-top: 1.5px solid var(--dsh-accent);
+  opacity: 0.4;
+}
+
+/* First child: horizontal line only covers right half */
+.dsh-tree-child:first-child::before {
+  left: 50%;
+}
+
+/* Last child: horizontal line only covers left half */
+.dsh-tree-child:last-child::before {
+  right: 50%;
+}
+
+/* Only child: no horizontal line, just vertical */
+.dsh-tree-child:only-child::before {
+  display: none;
+}

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Gemini Suite</title>
+    <link rel="stylesheet" href="/popup.css">
+    <style>
+      :root {
+        --opalite-gradient: linear-gradient(135deg, #f43f5e, #f97316, #eab308);
+        --opalite-accent: #f97316;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <div class="logo-group">
+        <img class="logo-icon" src="/images/icon-32.png" alt="">
+        <span class="logo">Gemini Suite</span>
+      </div>
+      <span class="platform-badge">Gemini</span>
+    </div>
+    <div id="loading">Loading...</div>
+    <div id="main-content" style="display:none;"></div>
+    <div class="footer">
+      <a href="https://opalitestudios.com/support" target="_blank" rel="noopener noreferrer">Help & Support</a>
+    </div>
+    <script type="module" src="./main.ts"></script>
+  </body>
+</html>

@@ -1,0 +1,59 @@
+[
+  {
+    "id": 1,
+    "priority": 1,
+    "action": {
+      "type": "modifyHeaders",
+      "responseHeaders": [
+        {
+          "header": "Content-Security-Policy",
+          "operation": "remove"
+        }
+      ]
+    },
+    "condition": {
+      "urlFilter": "|https*",
+      "requestDomains": [
+        "google.com",
+        "labs.google"
+      ],
+      "resourceTypes": [
+        "main_frame",
+        "sub_frame"
+      ]
+    }
+  },
+  {
+    "id": 2,
+    "priority": 1,
+    "action": {
+      "type": "modifyHeaders",
+      "responseHeaders": [
+        {
+          "header": "Access-Control-Allow-Origin",
+          "operation": "set",
+          "value": "https://gemini.google.com"
+        },
+        {
+          "header": "Access-Control-Allow-Credentials",
+          "operation": "set",
+          "value": "true"
+        }
+      ]
+    },
+    "condition": {
+      "requestDomains": [
+        "lh3.googleusercontent.com"
+      ],
+      "initiatorDomains": [
+        "gemini.google.com",
+        "aistudio.google.com",
+        "labs.google"
+      ],
+      "resourceTypes": [
+        "image",
+        "xmlhttprequest"
+      ]
+    }
+  }
+]

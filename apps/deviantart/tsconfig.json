@@ -1,0 +1,16 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "types": ["chrome-types"]
+  },
+  "include": [
+    "entrypoints/**/*.ts",
+    "automation/**/*.ts",
+    "core/**/*.ts",
+    "platform/**/*.ts",
+    "shared/**/*.ts",
+    "ui/**/*.ts",
+    "integration/**/*.ts",
+    ".wxt/wxt.d.ts"
+  ]
+}
