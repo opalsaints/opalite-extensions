@@ -231,6 +231,47 @@ async function handleFetchAsDataUri(
 }
 
 /**
+ * Fallback CSS injection: watch for the shadow host to appear, then
+ * inject CSS directly if main.js failed to adopt it.
+ *
+ * Runs in ISOLATED world but shares the DOM with MAIN world, so it
+ * can access the shadow root (mode: "open") and adopt stylesheets.
+ */
+function watchForShadowHost(css: string): void {
+  const SHADOW_HOST_ID = 'opalite-shadow-host';
+
+  function tryInjectCSS(): boolean {
+    const host = document.getElementById(SHADOW_HOST_ID);
+    if (!host) return false;
+    const shadow = host.shadowRoot;
+    if (!shadow) return false;
+    // Only inject if main.js didn't already adopt CSS
+    if (shadow.adoptedStyleSheets && shadow.adoptedStyleSheets.length > 0) return true;
+    try {
+      const sheet = new CSSStyleSheet();
+      sheet.replaceSync(css);
+      shadow.adoptedStyleSheets = [sheet];
+      console.log('[Opalite Content] CSS fallback: injected', sheet.cssRules.length, 'rules into shadow root');
+    } catch { /* ignore */ }
+    return true;
+  }
+
+  // Try immediately in case shadow host already exists
+  if (tryInjectCSS()) return;
+
+  // Watch for shadow host creation
+  const observer = new MutationObserver(() => {
+    if (tryInjectCSS()) {
+      observer.disconnect();
+    }
+  });
+  observer.observe(document.documentElement, { childList: true, subtree: true });
+
+  // Safety timeout: stop watching after 30s
+  setTimeout(() => observer.disconnect(), 30000);
+}
+
+/**
  * Initialize the content loader: inject static scripts, load CSS,
  * and set up the message bridge.
  *
@@ -259,6 +300,8 @@ export function setupContentLoader(config: ContentLoaderConfig): void {
       injectScript(compatUrl);
       injectScript(mainUrl);
       setupMessageBridge(appName, sourceId);
+      // Fallback: if main.js fails to adopt CSS, inject it directly
+      watchForShadowHost(css);
     })
     .catch(() => {
       // Even if CSS fetch fails, still inject scripts
