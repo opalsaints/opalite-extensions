@@ -101,11 +101,20 @@ jobs:
           FILTER: ${{ matrix.extension.package }}
         run: pnpm --filter "$FILTER" zip
 
+      # ── Find zip path (absolute, since wxt submit runs from app dir) ──
+      - name: Find zip file
+        if: steps.check.outputs.skip != 'true'
+        id: zip
+        run: |
+          ZIP_FILE=$(ls "$GITHUB_WORKSPACE/apps/${{ matrix.extension.name }}/.output/"*.zip 2>/dev/null | head -1)
+          echo "path=$ZIP_FILE" >> "$GITHUB_OUTPUT"
+
       # ── Publish to Chrome Web Store ──
       - name: Publish to CWS
         if: steps.check.outputs.skip != 'true' && inputs.publish != false && github.event_name != 'pull_request'
         env:
           FILTER: ${{ matrix.extension.package }}
+          CHROME_ZIP: ${{ steps.zip.outputs.path }}
           CHROME_EXTENSION_ID: ${{ secrets[matrix.extension.cws_id_secret] }}
           CHROME_CLIENT_ID: ${{ secrets.CWS_CLIENT_ID }}
           CHROME_CLIENT_SECRET: ${{ secrets.CWS_CLIENT_SECRET }}
