@@ -402,44 +402,52 @@ export function initPopup(config: PopupConfig): void {
   const loadingEl = document.getElementById('loading')!;
   const mainEl = document.getElementById('main-content')!;
 
-  Promise.all([getStorage(STORAGE_JWT_KEY), getStorage(STORAGE_USER_KEY)]).then(
-    ([token, userJson]) => {
+  Promise.all([getStorage(STORAGE_JWT_KEY), getStorage(STORAGE_USER_KEY)])
+    .then(([token, userJson]) => {
       chrome.tabs.query({ active: true, currentWindow: true }, async (tabs) => {
-        const tab = tabs[0];
-        const url = tab?.url || '';
-        const onPlatform = config.platformHosts.some((h) => url.includes(h));
+        try {
+          const tab = tabs[0];
+          const url = tab?.url || '';
+          const onPlatform = config.platformHosts.some((h) => url.includes(h));
 
-        if (!token) {
-          showLoggedOut(config, loadingEl, mainEl);
-        } else {
-          const claims = decodeJwt(token as string);
-          const user = userJson
-            ? typeof userJson === 'string'
-              ? JSON.parse(userJson)
-              : userJson
-            : null;
-          let socketConnected = false;
-          let planStatus: PlanStatusData | null = null;
-          if (onPlatform && tab?.id) {
-            const results = await Promise.all([
-              getSocketStatus(tab.id),
-              getPlanStatus(tab.id),
-            ]);
-            socketConnected = results[0];
-            planStatus = results[1];
+          if (!token) {
+            showLoggedOut(config, loadingEl, mainEl);
+          } else {
+            const claims = decodeJwt(token as string);
+            const user = userJson
+              ? typeof userJson === 'string'
+                ? JSON.parse(userJson)
+                : userJson
+              : null;
+            let socketConnected = false;
+            let planStatus: PlanStatusData | null = null;
+            if (onPlatform && tab?.id) {
+              const results = await Promise.all([
+                getSocketStatus(tab.id),
+                getPlanStatus(tab.id),
+              ]);
+              socketConnected = results[0];
+              planStatus = results[1];
+            }
+            showLoggedIn(
+              config,
+              loadingEl,
+              mainEl,
+              user,
+              claims,
+              onPlatform,
+              socketConnected,
+              planStatus
+            );
           }
-          showLoggedIn(
-            config,
-            loadingEl,
-            mainEl,
-            user,
-            claims,
-            onPlatform,
-            socketConnected,
-            planStatus
-          );
+        } catch (err) {
+          console.error('[Opalite Popup] Error:', err);
+          showLoggedOut(config, loadingEl, mainEl);
         }
       });
-    }
-  );
+    })
+    .catch((err) => {
+      console.error('[Opalite Popup] Storage error:', err);
+      showLoggedOut(config, loadingEl, mainEl);
+    });
 }

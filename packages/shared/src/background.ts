@@ -61,12 +61,16 @@ export function setupBackground(config: BackgroundConfig): void {
 
       switch (message.type) {
         case 'downloadImage':
-          downloadFile(message.url as string, message.filename as string);
+          downloadFile(message.url as string, message.filename as string).catch((err) => {
+            console.error('[Opalite BG] Download failed:', (err as Error).message);
+          });
           if (message.text) {
             downloadFile(
               message.text as string,
               getTextFilename(message.filename as string)
-            );
+            ).catch((err) => {
+              console.error('[Opalite BG] Text download failed:', (err as Error).message);
+            });
           }
           break;
 

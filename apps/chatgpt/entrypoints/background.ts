@@ -1,5 +1,4 @@
 import { setupBackground } from '@opalite/shared/background';
-import { setupDevReload } from '@opalite/shared/dev-reload';
 
 export default defineBackground(() => {
   setupBackground({
@@ -13,8 +12,12 @@ export default defineBackground(() => {
     sourceId: 'opalite',
   });
 
-  setupDevReload([
-    'https://chatgpt.com/*',
-    'https://sora.chatgpt.com/*',
-  ]);
+  if (import.meta.env.DEV) {
+    import('@opalite/shared/dev-reload').then(({ setupDevReload }) => {
+      setupDevReload([
+        'https://chatgpt.com/*',
+        'https://sora.chatgpt.com/*',
+      ]);
+    });
+  }
 });

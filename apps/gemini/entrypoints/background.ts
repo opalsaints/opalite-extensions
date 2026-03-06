@@ -1,5 +1,4 @@
 import { setupBackground } from '@opalite/shared/background';
-import { setupDevReload } from '@opalite/shared/dev-reload';
 
 export default defineBackground(() => {
   setupBackground({
@@ -14,9 +13,13 @@ export default defineBackground(() => {
     sourceId: 'opalite',
   });
 
-  setupDevReload([
-    'https://gemini.google.com/*',
-    'https://aistudio.google.com/*',
-    'https://labs.google/*',
-  ]);
+  if (import.meta.env.DEV) {
+    import('@opalite/shared/dev-reload').then(({ setupDevReload }) => {
+      setupDevReload([
+        'https://gemini.google.com/*',
+        'https://aistudio.google.com/*',
+        'https://labs.google/*',
+      ]);
+    });
+  }
 });
