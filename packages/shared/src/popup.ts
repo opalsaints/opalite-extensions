@@ -422,12 +422,16 @@ export function initPopup(config: PopupConfig): void {
             let socketConnected = false;
             let planStatus: PlanStatusData | null = null;
             if (onPlatform && tab?.id) {
-              const results = await Promise.all([
-                getSocketStatus(tab.id),
-                getPlanStatus(tab.id),
-              ]);
-              socketConnected = results[0];
-              planStatus = results[1];
+              try {
+                const results = await Promise.all([
+                  getSocketStatus(tab.id),
+                  getPlanStatus(tab.id),
+                ]);
+                socketConnected = results[0];
+                planStatus = results[1];
+              } catch {
+                // executeScript may fail if tab context is invalid
+              }
             }
             showLoggedIn(
               config,
@@ -440,14 +444,12 @@ export function initPopup(config: PopupConfig): void {
               planStatus
             );
           }
-        } catch (err) {
-          console.error('[Opalite Popup] Error:', err);
+        } catch {
           showLoggedOut(config, loadingEl, mainEl);
         }
       });
     })
-    .catch((err) => {
-      console.error('[Opalite Popup] Storage error:', err);
+    .catch(() => {
       showLoggedOut(config, loadingEl, mainEl);
     });
 }
