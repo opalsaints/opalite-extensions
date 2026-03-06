@@ -1,4 +1,5 @@
 import { setupBackground } from '@opalite/shared/background';
+import { setupDevReload } from '@opalite/shared/dev-reload';
 
 export default defineBackground(() => {
   setupBackground({
@@ -8,9 +9,5 @@ export default defineBackground(() => {
     sourceId: 'opalite',
   });
 
-  if (import.meta.env.DEV) {
-    import('@opalite/shared/dev-reload').then(({ setupDevReload }) => {
-      setupDevReload(['https://grok.com/*']);
-    });
-  }
+  setupDevReload(['https://grok.com/*']);
 });
