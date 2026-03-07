@@ -132,6 +132,10 @@
 
   .divider { height: 1px; background: #1f2937; margin: 32px 0; }
 
+  .copy-box.placeholder { border-style: dashed; border-color: #f97316; opacity: 0.7; }
+  .copy-box.placeholder::after { content: 'Placeholder — page not yet created'; color: #f97316; background: rgba(249,115,22,0.1); }
+  .image-card.placeholder { border-style: dashed; border-color: #f97316; opacity: 0.7; }
+
   @media print {
     body { background: #fff; color: #000; }
     .header, .tabs { position: static; }
@@ -150,6 +154,7 @@
   <div class="tab active" data-ext="gemini">Gemini Suite</div>
   <div class="tab" data-ext="grok">Grok Suite</div>
   <div class="tab" data-ext="chatgpt">ChatGPT & Sora Suite</div>
+  <div class="tab" data-ext="da">DeviantArt Auto</div>
   <div class="tab" data-ext="guide">Step-by-Step Guide</div>
 </div>
 
@@ -166,7 +171,7 @@
       <div class="copy-box">Gemini Suite by Opalite — batch-create and save every video and image you make with Google AI.
 
 WHAT IT DOES
-Supercharge your creative workflow on Gemini, Veo, Flow, Whisk, AI Studio, and Google Labs. Batch-send prompts, auto-save results, manage generation tasks, and organize everything in one place — free.
+Supercharge your creative workflow on Google's AI platforms. Batch-send prompts, auto-save results, manage generation tasks, and organize everything in one place — free.
 
 KEY FEATURES
 • Batch Prompt Sending: Queue up multiple prompts and send them automatically. Stop copying and pasting one at a time — let the extension handle it while you focus on creating.
@@ -181,11 +186,11 @@ KEY FEATURES
 • Easy Sharing: Share videos and images directly from your dashboard.
 
 SUPPORTED PLATFORMS
-Works everywhere Google generates AI media: Gemini (gemini.google.com), AI Studio (aistudio.google.com), Google Labs (labs.google), Veo, Flow, and Whisk.
+Works on Gemini and Veo.
 
 HOW IT WORKS
 1. Install the extension — start using immediately, no signup needed
-2. Generate on Gemini, Veo, Flow, or Whisk — use batch prompts or create as usual
+2. Generate on any supported Google AI tool — use batch prompts or create as usual
 3. Videos and images auto-save to your device as they're created
 4. Sign in anytime for cloud storage, AI upscaling, background removal, and sharing
 
@@ -234,7 +239,7 @@ Visit opalitestudios.com to learn more.</div>
 
     <div class="field">
       <label>Single Purpose Description</label>
-      <div class="copy-box">Batch-create, auto-save, and organize AI videos and images from Gemini, Veo, Flow, and Whisk — with prompt tools, upscaling, and cloud storage.</div>
+      <div class="copy-box">Batch-create, auto-save, and organize AI videos and images from Gemini— with prompt tools</div>
     </div>
 
     <div class="field">
@@ -267,7 +272,7 @@ Visit opalitestudios.com to learn more.</div>
     </div>
     <div class="field">
       <label>Host permission</label>
-      <div class="copy-box">This extension requires host access to gemini.google.com, aistudio.google.com, and labs.google to detect and capture AI-generated videos and images on these Google AI platforms. Host access to opalitestudios.com is required for API communication, user authentication, and media upload to the Opalite cloud service.</div>
+      <div class="copy-box">This extension requires host access to gemini.google.com and labs.google to detect and capture AI-generated videos and images on Gemini and Veo. Host access to opalitestudios.com is required for API communication, user authentication, and media upload to the Opalite cloud service.</div>
     </div>
 
     <div class="field">
@@ -302,7 +307,7 @@ LEAVE UNCHECKED:
 
     <div class="field">
       <label>Privacy Policy URL</label>
-      <div class="copy-box">https://opalitestudios.com/privacy</div>
+      <div class="copy-box">https://opalitestudios.com/docs/gemini/privacy</div>
     </div>
   </div>
 
@@ -323,6 +328,16 @@ LEAVE UNCHECKED:
     <div class="field">
       <label>Pricing</label>
       <div class="copy-box">Free</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Test Instructions</h2>
+    <div class="hint">Fill these into the "Test instructions" tab — helps reviewers evaluate your extension</div>
+
+    <div class="field">
+      <label>Additional Instructions</label>
+      <div class="copy-box">No login required. Install the extension and visit gemini.google.com or labs.google. The extension popup and sidebar appear automatically. Batch prompts, auto-save, templates, and task management all work immediately with no account.</div>
     </div>
   </div>
 
@@ -573,7 +588,7 @@ LEAVE UNCHECKED:
 
     <div class="field">
       <label>Privacy Policy URL</label>
-      <div class="copy-box">https://opalitestudios.com/privacy</div>
+      <div class="copy-box">https://opalitestudios.com/docs/grok/privacy</div>
     </div>
   </div>
 
@@ -594,6 +609,16 @@ LEAVE UNCHECKED:
     <div class="field">
       <label>Pricing</label>
       <div class="copy-box">Free</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Test Instructions</h2>
+    <div class="hint">Fill these into the "Test instructions" tab — helps reviewers evaluate your extension</div>
+
+    <div class="field">
+      <label>Additional Instructions</label>
+      <div class="copy-box">No login required. Install the extension and visit grok.com. The extension popup and sidebar appear automatically. Batch prompts, auto-save, templates, and task management all work immediately with no account.</div>
     </div>
   </div>
 
@@ -844,7 +869,7 @@ LEAVE UNCHECKED:
 
     <div class="field">
       <label>Privacy Policy URL</label>
-      <div class="copy-box">https://opalitestudios.com/privacy</div>
+      <div class="copy-box">https://opalitestudios.com/docs/chatgpt/privacy</div>
     </div>
   </div>
 
@@ -865,6 +890,16 @@ LEAVE UNCHECKED:
     <div class="field">
       <label>Pricing</label>
       <div class="copy-box">Free</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Test Instructions</h2>
+    <div class="hint">Fill these into the "Test instructions" tab — helps reviewers evaluate your extension</div>
+
+    <div class="field">
+      <label>Additional Instructions</label>
+      <div class="copy-box">No login required. Install the extension and visit chatgpt.com or sora.chatgpt.com. The extension popup and sidebar appear automatically. Batch prompts, auto-save, templates, and task management all work immediately with no account.</div>
     </div>
   </div>
 
@@ -968,11 +1003,251 @@ LEAVE UNCHECKED:
   </div>
 </div>
 
+<!-- ═══════════ DEVIANTART AUTO ═══════════ -->
+<div class="ext-section" id="da">
+  <div class="card">
+    <h2>Store Listing — Text Fields</h2>
+    <div class="hint">Click each box to copy, then paste into the CWS dashboard</div>
+
+    <div class="field">
+      <label>Detailed Description</label>
+      <div class="copy-box">DeviantArt Auto by Opalite — your bulk toolkit for managing stash and submissions on DeviantArt.
+
+TIRED OF THE TEDIOUS STUFF?
+If you've ever spent an afternoon scheduling deviations one at a time, copy-pasting the same description across a dozen items, or clicking through endless pages to set subscription tiers — this is for you. DeviantArt Auto handles the repetitive grunt work so you can get back to actually creating.
+
+WHAT YOU CAN DO
+• Schedule in Bulk — Queue up your stash items and schedule them for publishing whenever you want. Reschedule already-queued items just as easily.
+• Manage Subscription Tiers — Assign or swap tiers across dozens of items at once — page by page or across your entire stash. No more clicking into each one individually.
+• Bulk Edit Titles & Descriptions — Update metadata in batch using templates with variables. Prepend, append, or replace text across everything you've selected.
+• Scan Your Stash — Build a complete inventory of every folder and item in your stash. Browse the folder tree, paginate through results, and see everything in one place.
+• Auto-Discovery — The extension detects your galleries and subscription tiers automatically from your DeviantArt profile. No manual setup needed.
+
+HOW IT WORKS
+1. Install the extension and head to your DeviantArt stash
+2. A clean sidebar appears right on the page — toggle it with Ctrl+Shift+S
+3. Select items, pick an operation, and let it run
+4. Watch progress in real-time — pause or cancel anytime
+
+BUILT FOR YOUR WORKFLOW
+• Keyboard shortcuts: Ctrl+Shift+S to toggle, Ctrl+A to select all, Escape to go back
+• Matches DeviantArt's light and dark theme automatically
+• Pause, resume, or cancel any bulk operation mid-run
+• Real-time progress bar with ETA
+
+YOUR DATA STAYS WITH YOU
+Everything runs locally in your browser. No accounts, no cloud, no data sent anywhere. Your stash data never leaves your machine.
+
+Visit opalitestudios.com to learn more.</div>
+    </div>
+
+    <div class="field">
+      <label>Category</label>
+      <div class="copy-box">Workflow & Planning</div>
+    </div>
+
+    <div class="field">
+      <label>Homepage URL</label>
+      <div class="copy-box placeholder">https://opalitestudios.com/deviantart-auto</div>
+    </div>
+
+    <div class="field">
+      <label>Support URL</label>
+      <div class="copy-box placeholder">https://opalitestudios.com/support/deviantart-auto</div>
+    </div>
+
+    <div class="field">
+      <label>Mature Content</label>
+      <div class="copy-box">No — this extension does not contain mature content.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Privacy Practices <span class="badge">Required</span></h2>
+    <div class="hint">Fill these into the "Privacy" tab in the CWS dashboard — fields appear in this exact order</div>
+
+    <div class="field">
+      <label>Single Purpose Description</label>
+      <div class="copy-box">Bulk automation tools for DeviantArt — schedule submissions, manage subscription tiers, and batch-edit metadata directly from your stash page.</div>
+    </div>
+
+    <div class="field">
+      <label>Permission: storage</label>
+      <div class="copy-box">Required to persist user preferences, cached stash inventory, and operation history between browser sessions. All data is stored locally using Chrome's built-in storage API.</div>
+    </div>
+    <div class="field">
+      <label>Permission: tabs</label>
+      <div class="copy-box">Required to open and navigate between DeviantArt pages during multi-page bulk operations (scheduling, tier assignment, editing). Background tabs are opened temporarily and closed automatically after each operation.</div>
+    </div>
+    <div class="field">
+      <label>Permission: activeTab</label>
+      <div class="copy-box">Required to detect the current page context and interact with the active DeviantArt stash page when the user activates the extension.</div>
+    </div>
+    <div class="field">
+      <label>Host permission</label>
+      <div class="copy-box">This extension requires host access to deviantart.com and sta.sh to read and interact with the user's stash pages, submission forms, and gallery configuration. The extension uses content scripts to extract item data, fill scheduling forms, assign subscription tiers, and edit item metadata. No other domains are accessed.</div>
+    </div>
+
+    <div class="field">
+      <label>Remote Code</label>
+      <div class="copy-box">No, I am not using remote code.</div>
+    </div>
+
+    <div class="field">
+      <label>Data Usage — Check These Boxes</label>
+      <div class="copy-box">CHECK these data types:
+✓ Website content (reads stash page content to extract item data, folder structure, and form fields for automation)
+
+LEAVE UNCHECKED:
+✗ Personally identifiable information
+✗ Authentication information
+✗ Health information
+✗ Financial and payment information
+✗ Personal communications
+✗ Location
+✗ Web history
+✗ User activity</div>
+    </div>
+
+    <div class="field">
+      <label>Data Usage Certifications — Check All</label>
+      <div class="copy-box">CHECK all certification boxes:
+✓ I certify that data collection and usage complies with the extension's privacy policy
+✓ I certify that data is not sold to third parties
+✓ I certify that data is not used or transferred for purposes unrelated to the item's core functionality
+✓ I certify that data is not used or transferred to determine creditworthiness or for lending purposes</div>
+    </div>
+
+    <div class="field">
+      <label>Privacy Policy URL</label>
+      <div class="copy-box placeholder">https://opalitestudios.com/docs/da/privacy</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Distribution <span class="badge">Required</span></h2>
+    <div class="hint">Fill these into the "Distribution" tab in the CWS dashboard</div>
+
+    <div class="field">
+      <label>Visibility</label>
+      <div class="copy-box">Public</div>
+    </div>
+
+    <div class="field">
+      <label>Geographic Distribution</label>
+      <div class="copy-box">All regions</div>
+    </div>
+
+    <div class="field">
+      <label>Pricing</label>
+      <div class="copy-box">Free</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Test Instructions</h2>
+    <div class="hint">Fill these into the "Test instructions" tab — helps reviewers evaluate your extension</div>
+
+    <div class="field">
+      <label>Additional Instructions</label>
+      <div class="copy-box">A DeviantArt account with items in your stash (sta.sh) is required to test this extension. Install the extension and visit sta.sh. The sidebar appears automatically — toggle it with Ctrl+Shift+S. You can scan your stash, select items, and run bulk operations (scheduling, tier management, metadata editing) from the sidebar.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Graphic Assets — All Media for CWS Upload</h2>
+    <div class="hint">Click "Download" to save each file, then upload to the matching CWS field. Upload order: Store icon → Localized screenshots → Global screenshots (same files) → Small promo tile → Marquee promo tile</div>
+
+    <div class="asset-section-title">Store Icon (128 × 128)</div>
+    <div class="image-grid">
+      <div class="image-card">
+        <img src="da-assets/icon-128.png" alt="Store Icon" style="width:128px;height:128px;margin:16px auto;display:block;border-radius:12px;">
+        <div class="img-info">
+          <div>
+            <div class="img-label">Store Icon (DeviantArt Auto)</div>
+            <div class="img-dims">128 × 128 PNG</div>
+          </div>
+          <a href="da-assets/icon-128.png" download class="download-btn">Download</a>
+        </div>
+      </div>
+      <div class="image-card">
+        <img src="da-assets/icon-128-light.png" alt="Store Icon Light" style="width:128px;height:128px;margin:16px auto;display:block;border-radius:12px;">
+        <div class="img-info">
+          <div>
+            <div class="img-label">Store Icon — Light Variant</div>
+            <div class="img-dims">128 × 128 PNG (alternative)</div>
+          </div>
+          <a href="da-assets/icon-128-light.png" download class="download-btn">Download</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="asset-section-title">Localized & Global Screenshots (1280 × 800) — Up to 5 each</div>
+    <div class="image-grid">
+      <div class="image-card placeholder">
+        <div style="width:100%;height:200px;display:flex;align-items:center;justify-content:center;background:#1a1a2e;border:2px dashed #00e59b;border-radius:8px;color:#00e59b;font-size:14px;text-align:center;">Screenshot 1<br>Sidebar Overview<br><small>Pending</small></div>
+        <div class="img-info">
+          <div>
+            <div class="img-label">Screenshot 1 — Sidebar Overview</div>
+            <div class="img-dims">1280 × 800 — to be created</div>
+          </div>
+        </div>
+      </div>
+      <div class="image-card placeholder">
+        <div style="width:100%;height:200px;display:flex;align-items:center;justify-content:center;background:#1a1a2e;border:2px dashed #00e59b;border-radius:8px;color:#00e59b;font-size:14px;text-align:center;">Screenshot 2<br>Bulk Operations<br><small>Pending</small></div>
+        <div class="img-info">
+          <div>
+            <div class="img-label">Screenshot 2 — Bulk Operations</div>
+            <div class="img-dims">1280 × 800 — to be created</div>
+          </div>
+        </div>
+      </div>
+      <div class="image-card placeholder">
+        <div style="width:100%;height:200px;display:flex;align-items:center;justify-content:center;background:#1a1a2e;border:2px dashed #00e59b;border-radius:8px;color:#00e59b;font-size:14px;text-align:center;">Screenshot 3<br>Stash Scanner<br><small>Pending</small></div>
+        <div class="img-info">
+          <div>
+            <div class="img-label">Screenshot 3 — Stash Scanner</div>
+            <div class="img-dims">1280 × 800 — to be created</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="asset-section-title">Small Promo Tile (440 × 280)</div>
+    <div class="image-grid">
+      <div class="image-card">
+        <img src="da-assets/small-promo-440x280.png" alt="Small Promo Tile" style="width:100%;max-width:440px;margin:8px auto;display:block;border-radius:8px;">
+        <div class="img-info">
+          <div>
+            <div class="img-label">Small Promo Tile</div>
+            <div class="img-dims">440 × 280 PNG</div>
+          </div>
+          <a href="da-assets/small-promo-440x280.png" download class="download-btn">Download</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="asset-section-title">Marquee Promo Tile (1400 × 560)</div>
+    <div class="image-grid">
+      <div class="image-card">
+        <img src="da-assets/marquee-promo-1400x560.png" alt="Marquee Promo Tile" style="width:100%;max-width:700px;margin:8px auto;display:block;border-radius:8px;">
+        <div class="img-info">
+          <div>
+            <div class="img-label">Marquee Promo Tile</div>
+            <div class="img-dims">1400 × 560 PNG (optional)</div>
+          </div>
+          <a href="da-assets/marquee-promo-1400x560.png" download class="download-btn">Download</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- ═══════════ GUIDE ═══════════ -->
 <div class="ext-section" id="guide">
   <div class="card">
     <h2>Step-by-Step: Fill Out CWS Listing</h2>
-    <div class="hint">Follow these steps for each extension (Gemini Suite, Grok Suite, ChatGPT Suite)</div>
+    <div class="hint">Follow these steps for each extension (Gemini Suite, Grok Suite, ChatGPT Suite, DeviantArt Auto)</div>
 
     <div class="step-list">
       <div class="step-item">
@@ -1006,7 +1281,7 @@ LEAVE UNCHECKED:
         — Remote code: select "No, I am not using remote code"<br>
         — Data usage: check the 5 boxes listed in this helper (PII, Auth, Web history, User activity, Website content)<br>
         — Data usage certifications: check all 3 certification boxes<br>
-        — Privacy policy URL: https://opalitestudios.com/privacy<br>
+        — Privacy policy URL: use per-extension URL (e.g., https://opalitestudios.com/docs/gemini/privacy)<br>
         → Click "Save draft"</p>
       </div>
       <div class="step-item">
@@ -1018,8 +1293,15 @@ LEAVE UNCHECKED:
         → Click "Save draft"</p>
       </div>
       <div class="step-item">
+        <h3>Fill in Test Instructions</h3>
+        <p>Go to the "Test instructions" tab:<br>
+        — Leave Username and Password blank (no login required for core features)<br>
+        — Paste the Additional Instructions from this helper page<br>
+        → Click "Save draft"</p>
+      </div>
+      <div class="step-item">
         <h3>Review & Submit</h3>
-        <p>Check all tabs show green checkmarks. Once all 3 tabs are green, click "Submit for review".</p>
+        <p>Check all tabs show green checkmarks. Once all tabs are green, click "Submit for review".</p>
       </div>
     </div>
   </div>

@@ -16,7 +16,6 @@ export default defineBackground(() => {
 
   setupDevReload([
     'https://gemini.google.com/*',
-    'https://aistudio.google.com/*',
     'https://labs.google/*',
   ]);
 });

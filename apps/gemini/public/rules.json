@@ -47,7 +47,6 @@
       ],
       "initiatorDomains": [
         "gemini.google.com",
-        "aistudio.google.com",
         "labs.google"
       ],
       "resourceTypes": [

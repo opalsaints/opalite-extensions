@@ -18,7 +18,6 @@ export default defineConfig({
     ],
     host_permissions: [
       'https://gemini.google.com/*',
-      'https://aistudio.google.com/*',
       'https://labs.google/*',
       'https://opalitestudios.com/*',
       'https://lh3.googleusercontent.com/*',
@@ -27,7 +26,6 @@ export default defineConfig({
       {
         matches: [
           'https://gemini.google.com/*',
-          'https://aistudio.google.com/*',
           'https://labs.google/*',
         ],
         resources: [
